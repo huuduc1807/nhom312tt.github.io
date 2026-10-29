@@ -7,13 +7,14 @@
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
         .container { max-width: 900px; margin: 0 auto; }
 
+     
         /* 1. Tiêu đề nhóm */
-        .header { display:flex; text-align: center; background-color: #1e3c72; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        .header img.logo {width :60px; height: 60px; object-fit:cover;border-radius: 50%;}
-        .header h1 {margin :0; font-size : 1.8rem;}
-       .header-text { text-align: center;}
-        .header-text h1 {  margin: 0 0 5px 0;   font-size: 1.8rem;}
-    .header-text p {  margin: 0;  font-size: 0.95rem; font-style: italic;  opacity: 0.9;}
+.header {     display: flex;     align-items: center;     background-color: #1e3c72;     color: white;    padding: 20px;     border-radius: 8px;     margin-bottom: 20px;     position: relative;}
+.header img.logo {     width: 50px;       height: 50px;      object-fit: cover;     border-radius: 50%;    position: absolute; /* Giúp logo cố định bên trái, không ảnh hưởng đến việc căn giữa chữ */    left: 20px;}
+.header-text {    width: 100%;  text-align: center; /* Căn giữa toàn bộ chữ (tên nhóm và slogan) */}
+.header-text h1 {   margin: 0 0 5px 0;     font-size: 1.8rem;}
+.header-text p {    margin: 0;     font-size: 0.95rem;     font-style: italic;  opacity: 0.9;}
+
         
         /* Khung nội dung chung */
         .box { background-color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
@@ -51,8 +52,8 @@
        <div class="header">
         <img src="nhom3.jpg" alt="Logo Nhóm" class="logo">
         <div class="header-text">
-        <h1>NHÓM 4 - LỚP 12TT</h1>
-        <p>nhóm này là cái nhóm 4</p>
+        <h1>NHÓM 3 - LỚP 12TT</h1>
+        <p>nhóm này là cái nhóm </p>
         </div>
     </div>
 
