@@ -1,217 +1,879 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <title>Nhóm 3 - Lớp 12TT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhóm 3 - Lớp 12TT | Chuyên Toán 2024 – 2027</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                    colors: {
+                        appleBg: '#fbfbfd',
+                        appleText: '#1d1d1f',
+                        appleSub: '#6e6e73',
+                        appleBlue: '#0066cc',
+                        appleBorder: 'rgba(0, 0, 0, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
+        body {
+            background-color: #fbfbfd;
+            color: #1d1d1f;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
 
-     
-        /* 1. Tiêu đề nhóm */
-.header { display: flex;  align-items: center; background-color: #1e3c72;   color: white; padding: 25px 40px;   border-radius: 0; /* Bỏ bo góc để tràn khít mép */ margin-bottom: 20px;  position: relative; width: 100vw; margin-left: calc(50% - 50vw);box-sizing: border-box;}
-.header img.logo {  width: 100px;     height: 100px;   object-fit: cover;   border-radius: 50%;  position: absolute; /* Giữ logo cố định bên trái khung xanh */  left: 40px}
-.header-text { width: 100%; text-align: center; /* Căn giữa tuyệt đối tên nhóm và slogan */}
-.header-text h1 {    margin: 0 0 5px 0;     font-size: 1.8rem;}
-.header-text p {    margin: 0;     font-size: 0.95rem;     font-style: italic;   opacity: 0.9;}
+        /* Thanh tiến trình đọc mượt mà trên đỉnh màn hình */
+        #scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2.5px;
+            background: linear-gradient(90deg, #0066cc, #5e5ce6, #30d158);
+            width: 0%;
+            z-index: 100;
+            pointer-events: none;
+        }
 
+        /* Thanh điều hướng kính mờ chuẩn Apple */
+        .frosted-nav {
+            background: rgba(251, 251, 253, 0.75);
+            backdrop-filter: saturate(180%) blur(22px);
+            -webkit-backdrop-filter: saturate(180%) blur(22px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
 
+        /* Nền Aurora cực quang chuyển động mềm mại */
+        .aurora-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .aurora-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: 0.45;
+            will-change: transform;
+        }
 
-        
-        /* Khung nội dung chung */
-        .box { background-color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
-        .box h2 { text-align: center; color: #1e3c72; margin-bottom: 15px; border-bottom: 2px solid #1e3c72; padding-bottom: 5px; }
+        /* Luồng ánh sáng cảm biến đi theo con trỏ chuột */
+        #cursor-glow {
+            position: fixed;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 102, 204, 0.08) 0%, rgba(94, 92, 230, 0.04) 40%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1;
+            will-change: left, top;
+        }
 
-        /* 2. Ảnh nhóm lớn */
-        .group-img { width: 50%; height: auto; border-radius: 8px; display:block; margin: 0 auto; border: 1px solid #ccc; }
+        /* Thẻ Bento tinh tế có viền cảm biến ánh sáng & chiều sâu 3D */
+        .apple-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border-radius: 28px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+            transition: box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s ease;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
 
-        /* 3. 5 Thành viên */
-        .member-container { display: flex; justify-content: space-around; flex-wrap: wrap; text-align: center; }
-        .member-item { width: 150px; margin: 10px; }
-        .member-item img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #1e3c72; }
-        .member-item p { font-weight: bold; margin-top: 8px; font-size: 0.95rem; }
-        .member-item a{display: block; font-weight: bold; margin-top: 8px; font-size 0.95rem; corlor: #1e3c72; text-decoration: none;}
-        .member-item a:hover{ text-decoration: underline;}
-        .member-item .slogan{ font-size: 0.8rem; color: #666; margin-top: 4px; font-style: italic;}
+        .apple-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 28px;
+            padding: 1.5px;
+            background: radial-gradient(
+                420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(0, 102, 204, 0.45),
+                rgba(94, 92, 230, 0.2),
+                transparent 65%
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
 
-        /* 4. Khu vực bài tập chia cục */
-        .exercise-item { border-radius: 8px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
-        .exercise-item img { width: 120px; height: 80px; object-fit: cover; border-radius: 5px; border: 1px solid #ccc; }
-        .exercise-info h3 { margin-bottom: 5px; }
-        .exercise-info a { display: inline-block; margin-top: 8px; color: white; background-color: #333; padding: 5px 12px; text-decoration: none; border-radius: 4px; font-size: 0.85rem; }
+        .apple-card:hover {
+            box-shadow: 0 24px 55px rgba(0, 0, 0, 0.08);
+        }
 
-        /* Màu nền riêng cho từng cục bài tập */
-        .cuc-1 { background-color: #e3f2fd; color: #0d47a1; }
-        .cuc-2 { background-color: #e8f5e9; color: #1b5e20; }
-        .cuc-3 { background-color: #fff3e0; color: #e65100; }
-        .lesson-box {    background-color: #f8f9fa;    border: 2px solid #1e3c72;    border-radius: 8px;    padding: 15px;    margin-bottom: 20px;}
-        .lesson-title {   color: #1e3c72;   font-size: 1.2rem;   margin-top: 0;   margin-bottom: 15px;   border-bottom: 2px dashed #1e3c72;   padding-bottom: 5px;}
+        .apple-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Hiệu ứng chữ tách dòng (Kinetic Line Reveal) */
+        .line-mask {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: bottom;
+            padding-bottom: 0.1em;
+        }
+
+        .line-inner {
+            display: inline-block;
+            transform: translateY(115%);
+            will-change: transform;
+        }
+
+        /* Khung ảnh Nhóm Chúng Mình mở rộng mượt theo cuộn trang */
+        .showcase-wrapper {
+            border-radius: 36px;
+            overflow: hidden;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.12);
+            transform-origin: center center;
+            will-change: transform, border-radius;
+        }
+
+        .showcase-img {
+            will-change: transform;
+            transform: scale(1.14);
+        }
+
+        /* Dải chữ chạy ngang tốc độ cuộn (Velocity Marquee) */
+        .marquee-track {
+            display: flex;
+            white-space: nowrap;
+            will-change: transform;
+        }
+
+        /* Kho bài tập Accordion chuẩn chỉnh, dễ thêm bằng tay */
+        .lesson-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(14px);
+            border-radius: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.025);
+            margin-bottom: 16px;
+            transition: box-shadow 0.35s ease, border-color 0.35s ease;
+            overflow: hidden;
+        }
+
+        .lesson-box:hover {
+            border-color: rgba(0, 102, 204, 0.25);
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.06);
+        }
+
+        .lesson-title {
+            padding: 22px 28px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1d1d1f;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            transition: background-color 0.25s ease;
+        }
+
+        .lesson-title:hover {
+            background-color: rgba(0, 0, 0, 0.015);
+        }
+
+        .lesson-title::-webkit-details-marker {
+            display: none;
+        }
+
+        .chevron-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f5f5f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, color 0.3s ease;
+        }
+
+        details[open] .chevron-icon {
+            transform: rotate(180deg);
+            background: #1d1d1f;
+            color: #ffffff;
+        }
+
+        .lesson-content {
+            padding: 6px 28px 28px 28px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        /* Thẻ từng bài tập con */
+        .exercise-item {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .exercise-item:hover {
+            transform: translateY(-4px);
+            background: #ffffff;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .exercise-thumb-wrap {
+            width: 100%;
+            height: 150px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #e8e8ed;
+        }
+
+        .exercise-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .exercise-item:hover img {
+            transform: scale(1.07);
+        }
+
+        .exercise-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: #1d1d1f;
+            color: #ffffff;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.25s ease, transform 0.2s ease;
+        }
+
+        .exercise-btn:hover {
+            background: #0066cc;
+        }
+
+        /* Nút nam châm (Magnetic Interaction) */
+        .magnetic-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Thanh cuộn tinh gọn */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fbfbfd; }
+        ::-webkit-scrollbar-thumb { background: #d2d2d7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #86868b; }
     </style>
 </head>
-<body>
+<body class="selection:bg-blue-600 selection:text-white">
 
-    <div class="container">
+    <!-- Thanh tiến trình cuộn -->
+    <div id="scroll-indicator"></div>
 
-        <!-- 1. TIÊU ĐỀ NÓM CĂN GIỮA -->
-       <div class="header">
-        <img src="nhom3.jpg" alt="Logo Nhóm" class="logo">
-        <div class="header-text">
-        <h1>NHÓM 3 - LỚP 12TT</h1>
-        <p>nhóm này là cái nhóm </p>
-        </div>
+    <!-- Nền Aurora cực quang chuyển động mượt -->
+    <div class="aurora-layer">
+        <div class="aurora-orb w-[520px] h-[520px] bg-blue-300/40 -top-24 -left-24" id="orb-1"></div>
+        <div class="aurora-orb w-[480px] h-[480px] bg-indigo-300/35 top-1/3 -right-24" id="orb-2"></div>
+        <div class="aurora-orb w-[500px] h-[500px] bg-sky-200/45 -bottom-24 left-1/4" id="orb-3"></div>
     </div>
 
-        <!-- 2. ẢNH NHÓM LỚN -->
-        <div class="box">
-            <h2>HÌNH ẢNH NHÓM</h2>
-            <img src="nhom.jpg" alt="Ảnh Nhóm 4" class="group-img">
-        </div>
+    <!-- Vòng sáng cảm biến theo chuột -->
+    <div id="cursor-glow"></div>
 
-        <!-- 3. TƯỜNG THÀNH VIÊN THEO TÊN -->
-        <div class="box">
-            <h2>THÀNH VIÊN NHÓM</h2>
-            <div class="member-container">
-                <div class="member-item">
-                    <img src="nam.jpg" alt="Nguyễn Bảo Nam">
-                    <a href="trangnam.html">Nguyễn Bảo Nam</a>
-                    <p class="slogan">An Thư dễ thương</p>
+    <!-- THANH ĐIỀU HƯỚNG TỐI GIẢN -->
+    <nav class="frosted-nav fixed top-0 inset-x-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <img src="nhom3.jpg" alt="Logo Nhóm 3" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80'" class="w-9 h-9 rounded-full object-cover border border-black/10 transition-transform duration-500 group-hover:scale-110">
+                <div class="flex flex-col">
+                    <span class="font-display font-bold text-base tracking-tight text-appleText leading-none">Nhóm 3 · 12TT</span>
+                    <span class="text-[11px] font-medium text-appleSub mt-0.5">Chuyên Toán 2024 – 2027</span>
                 </div>
-                <div class="member-item">
-                    <img src="duc.jpg" alt="Nguyễn Hữu Đức">
-                     <a href="trangduc.html">Nguyễn Hữu Đức</a>
-                     <p class="slogan">con bò chắc chắn biết bay</p>
-                </div>
-                <div class="member-item">
-                    <img src="nhu.jpg" alt="Mai Thanh Như">
-                     <a href="trangnhu.html">Mai Thanh Như</a>
-                     <p class="slogan">Hóa đủ rồi</p>
-                </div>
-                <div class="member-item">
-                    <img src="han.jpg" alt="Nguyễn Hoàng Gia Hân">
-                     <a href="tranghan.html">Nguyễn Hoàng Gia Hân</a>
-                     <p class="slogan">gái đầu hói chỉ nói yêu anh</p>
-                </div>
-                <div class="member-item">
-                    <img src="my.jpg" alt="Huỳnh Dương Ái My">
-                     <a href="trangmy.html">Huỳnh Dương Ái My</a>
-                     <p class="slogan">chạy theo con chó tưởng đó là anh</p>
-                </div>
+            </a>
+
+            <div class="hidden sm:flex items-center gap-8 text-sm font-medium text-appleSub">
+                <a href="#nhom-chung-minh" class="hover:text-appleText transition-colors">Nhóm Chúng Mình</a>
+                <a href="#thanh-vien" class="hover:text-appleText transition-colors">Thành Viên</a>
+                <a href="#bai-tap" class="hover:text-appleText transition-colors">Bài Tập</a>
             </div>
         </div>
+    </nav>
 
-        <!-- 4. KHU VỰC LƯU BÀI TẬP CHIA CỤC -->
-        <div class="box">
-            <h2>DANH SÁCH BÀI TẬP</h2>
-         <details class="lesson-box"> <!-- Thêm chữ 'open' nếu muốn mặc định nó mở sẵn khi vào trang -->
-        <summary class="lesson-title">📁 Bài 10</summary>
+    <!-- NỘI DUNG CHÍNH -->
+    <main class="relative z-10 pt-28 pb-24">
 
-        <div class="lesson-content">
-            <!-- Cục 1 -->
-            <div class="exercise-item cuc-1">
-                <img src="lt1bai10.jpg" alt="Luyện Tập 1 Bài 10">
-                <div class="exercise-info">
-                    <h3>Bài 10</h3>
-                    <p>Luyện tập 1</p>
-                    <a href="lt1bai10.html">Xem bài tập</a>
-                </div>
+        <!-- 1. HERO SECTION (KINETIC SPLIT-TEXT & PARALLAX) -->
+        <section class="max-w-5xl mx-auto px-6 pt-8 pb-16 text-center">
+            <div class="hero-badge inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur border border-black/5 shadow-sm text-xs font-semibold text-appleSub mb-7 opacity-0 translate-y-4">
+                <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                <span>Lớp Chuyên Toán 2024 – 2027 • THPT Chuyên Bến Tre</span>
             </div>
 
-            <!-- Cục 2 -->
-            <div class="exercise-item cuc-2">
-                <img src="lt2bai10.jpg" alt="Bài tập 2">
-                <div class="exercise-info">
-                    <h3>Bài 10</h3>
-                    <p>Luyện Tập 2</p>
-                    <a href="lt2bai10.html">Xem bài tập</a>
-                </div>
-            </div>
+            <h1 class="font-display text-5xl sm:text-7xl md:text-[5.25rem] font-extrabold tracking-tight text-appleText leading-[1.05] mb-6">
+                <span class="line-mask"><span class="line-inner">Nhóm 3.</span></span><br>
+                <span class="line-mask"><span class="line-inner bg-gradient-to-r from-appleText via-blue-700 to-indigo-600 bg-clip-text text-transparent">Góc nhỏ của 12TT.</span></span>
+            </h1>
 
-            <!-- Cục 3 -->
-            <div class="exercise-item cuc-3">
-                <img src="vd2bai10.jpg" alt="Van dung 2 bai 10">
-                <div class="exercise-info">
-                    <h3>Bài 10 </h3>
-                    <p>Vận Dụng 2 </p>
-                    <a href="vd2bai10.html">Xem bài tập</a>
-                </div>
+            <p class="hero-sub max-w-xl mx-auto text-lg sm:text-xl text-appleSub font-normal leading-relaxed mb-10 opacity-0 translate-y-5">
+                "nhóm này là cái nhóm" — Không gian lưu giữ những khoảnh khắc đồng hành và hệ thống bài thực hành Tin học của năm thành viên.
+            </p>
+
+            <div class="hero-cta flex flex-wrap items-center justify-center gap-4 opacity-0 translate-y-5">
+                <a href="#bai-tap" class="magnetic-btn px-7 py-3.5 rounded-full bg-appleText text-white font-medium text-sm hover:bg-blue-600 shadow-lg shadow-black/10 transition-colors">
+                    Khám phá kho bài tập
+                </a>
+                <a href="#thanh-vien" class="magnetic-btn px-7 py-3.5 rounded-full bg-white/90 backdrop-blur text-appleText font-medium text-sm border border-black/10 hover:border-black/25 transition-colors">
+                    Gặp gỡ thành viên
+                </a>
+            </div>
+        </section>
+
+        <!-- DẢI CHỮ CHẠY NGANG THEO TỐC ĐỘ CUỘN (DUAL VELOCITY MARQUEE) -->
+        <div class="py-5 overflow-hidden select-none pointer-events-none opacity-45">
+            <div class="marquee-track marquee-left font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-black/[0.045] uppercase">
+                <span class="mx-6">NHÓM 3 · LỚP 12TT</span> •
+                <span class="mx-6">CHUYÊN TOÁN 2024 – 2027</span> •
+                <span class="mx-6">THPT CHUYÊN BẾN TRE</span> •
+                <span class="mx-6">NHÓM 3 · LỚP 12TT</span> •
+                <span class="mx-6">CHUYÊN TOÁN 2024 – 2027</span> •
+            </div>
+            <div class="marquee-track marquee-right font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-blue-900/[0.045] uppercase mt-1">
+                <span class="mx-6">BẢO NAM · HỮU ĐỨC · THANH NHƯ · GIA HÂN · ÁI MY</span> •
+                <span class="mx-6">BẢO NAM · HỮU ĐỨC · THANH NHƯ · GIA HÂN · ÁI MY</span> •
             </div>
         </div>
-         </details><!-- Kết thúc Cục lớn Bài 10 -->
-        
- <details class="lesson-box"> <!-- Thêm chữ 'open' nếu muốn mặc định nó mở sẵn khi vào trang -->
-        <summary class="lesson-title">📁 Bài 11</summary>
-           <div class="lesson-content">
-       <!-- Cục 1 -->
-            <div class="exercise-item cuc-3">
-                <div class="exercise-info">
-                    <h3> TRẢ LỜI LUYỆN TẬP 1 BÀI 11</h3>
-                    <p>Ảnh có kích thước 375px </p>
+
+        <!-- 2. NHÓM CHÚNG MÌNH (APPLE SCROLL-DRIVEN EXPANSION & INTERNAL PARALLAX) -->
+        <section id="nhom-chung-minh" class="max-w-6xl mx-auto px-6 py-16">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 reveal-header">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-widest text-appleBlue mb-2">Tập thể</p>
+                    <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-appleText">Nhóm Chúng Mình</h2>
                 </div>
-              </div> 
-     
-     <!-- Cục 1 -->
-            <div class="exercise-item cuc-1">
-                <img src="lt2bai11(1).jpg" alt="Luyện Tập 2 Bài 11">
-                <img src="lt2bai11(2).jpg" alt="Luyện Tập 2 Bài 11">
-                <div class="exercise-info">
-                    <h3>Bài 11</h3>
-                    <p>Luyện tập 2</p>
-                    <a href="lt2bai11.html">Xem bài tập</a>
-                </div>
-            </div>
-     
-          <!--cuc 3-->
-           <div class="exercise-item cuc-2">
-                <img src="vdbai11.jpg" alt="Vận Dụng Bài 11">
-                <div class="exercise-info">
-                    <h3>Bài 11</h3>
-                    <p>Vận Dụng</p>
-                    <a href="vdbai11.html">Xem bài tập</a>
-                </div>
+                <p class="text-sm text-appleSub max-w-sm">
+                    Năm mảnh ghép với năm cá tính riêng biệt cùng học tập và ghi dấu tại Chuyên Toán 2024 – 2027.
+                </p>
             </div>
 
-           </div>
-         </details>
+            <div class="showcase-wrapper bg-gray-200 aspect-[16/9] max-h-[620px] w-full relative">
+                <img src="nhom.jpg" alt="Nhóm Chúng Mình - Nhóm 3 12TT" onerror="this.src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=85'" class="showcase-img w-full h-full object-cover">
+            </div>
+        </section>
 
-             <details class="lesson-box"> <!-- Thêm chữ 'open' nếu muốn mặc định nó mở sẵn khi vào trang -->
-        <summary class="lesson-title">📁 Bài 12</summary>
-           <div class="lesson-content">
-               <!--cuc1-->
-               <div class="exercise-item cuc-3">
-                <img src="lt1bai12.jpg" alt="Luyện tập Bài 12">
-                <div class="exercise-info">
-                    <h3>Bài 12</h3>
-                    <p>Luyện Tập</p>
-                    <a href="lt1bai12.html">Xem bài tập</a>
-                </div>
-            </div>
-               <!--cuc 2-->
- <div class="exercise-item cuc-1">
-                <img src="vd1bai12.jpg" alt="Vận dụng Bài 12">
-                <div class="exercise-info">
-                    <h3>Bài 12</h3>
-                    <p>Vận Dụng 1</p>
-                    <a href="vd1bai12.html">Xem bài tập</a>
-                </div>
-            </div>
-               <!--cuc 3-->
- <div class="exercise-item cuc-2">
-                <img src="vd2bai12.jpg" alt="Vận Dụng Bài 12">
-                <div class="exercise-info">
-                    <h3>Bài 12</h3>
-                    <p>Vận Dụng 2</p>
-                    <a href="vd2bai12.html">Xem bài tập</a>
-                </div>
+        <!-- 3. THÀNH VIÊN NHÓM (5 THẺ BÌNH ĐẲNG TUYỆT ĐỐI + 3D PERSPECTIVE TILT) -->
+        <section id="thanh-vien" class="max-w-6xl mx-auto px-6 py-20">
+            <div class="text-center max-w-2xl mx-auto mb-14 reveal-header">
+                <p class="text-xs font-semibold uppercase tracking-widest text-appleBlue mb-2">Đội hình</p>
+                <h2 class="font-display text-3xl sm:text-5xl font-bold tracking-tight text-appleText mb-4">Năm thành viên.</h2>
+                <p class="text-base text-appleSub">Chọn vào từng thành viên để ghé thăm góc cá nhân riêng biệt.</p>
             </div>
 
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5" id="members-grid">
 
+                <!-- Thành viên 1: Nguyễn Bảo Nam -->
+                <a href="trangnam.html" class="apple-card tilt-card member-card p-6 flex flex-col items-center text-center group">
+                    <div class="w-24 h-24 rounded-full overflow-hidden mb-5 ring-1 ring-black/10 bg-gray-100">
+                        <img src="nam.jpg" alt="Nguyễn Bảo Nam" onerror="this.src='https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80'" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                    </div>
+                    <h3 class="font-display font-bold text-base text-appleText group-hover:text-appleBlue transition-colors">
+                        Nguyễn Bảo Nam
+                    </h3>
+                    <p class="text-xs text-appleSub italic mt-2 leading-relaxed">
+                        "An Thư dễ thương"
+                    </p>
+                    <span class="mt-5 text-xs font-medium text-appleBlue opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        Xem trang cá nhân →
+                    </span>
+                </a>
 
- </div>
-         </details>
+                <!-- Thành viên 2: Nguyễn Hữu Đức -->
+                <a href="trangduc.html" class="apple-card tilt-card member-card p-6 flex flex-col items-center text-center group">
+                    <div class="w-24 h-24 rounded-full overflow-hidden mb-5 ring-1 ring-black/10 bg-gray-100">
+                        <img src="duc.jpg" alt="Nguyễn Hữu Đức" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80'" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                    </div>
+                    <h3 class="font-display font-bold text-base text-appleText group-hover:text-appleBlue transition-colors">
+                        Nguyễn Hữu Đức
+                    </h3>
+                    <p class="text-xs text-appleSub italic mt-2 leading-relaxed">
+                        "con bò chắc chắn biết bay"
+                    </p>
+                    <span class="mt-5 text-xs font-medium text-appleBlue opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        Xem trang cá nhân →
+                    </span>
+                </a>
 
-               
+                <!-- Thành viên 3: Mai Thanh Như -->
+                <a href="trangnhu.html" class="apple-card tilt-card member-card p-6 flex flex-col items-center text-center group">
+                    <div class="w-24 h-24 rounded-full overflow-hidden mb-5 ring-1 ring-black/10 bg-gray-100">
+                        <img src="nhu.jpg" alt="Mai Thanh Như" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80'" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                    </div>
+                    <h3 class="font-display font-bold text-base text-appleText group-hover:text-appleBlue transition-colors">
+                        Mai Thanh Như
+                    </h3>
+                    <p class="text-xs text-appleSub italic mt-2 leading-relaxed">
+                        "Hóa đủ rồi"
+                    </p>
+                    <span class="mt-5 text-xs font-medium text-appleBlue opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        Xem trang cá nhân →
+                    </span>
+                </a>
+
+                <!-- Thành viên 4: Nguyễn Hoàng Gia Hân -->
+                <a href="tranghan.html" class="apple-card tilt-card member-card p-6 flex flex-col items-center text-center group">
+                    <div class="w-24 h-24 rounded-full overflow-hidden mb-5 ring-1 ring-black/10 bg-gray-100">
+                        <img src="han.jpg" alt="Nguyễn Hoàng Gia Hân" onerror="this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=300&q=80'" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                    </div>
+                    <h3 class="font-display font-bold text-base text-appleText group-hover:text-appleBlue transition-colors">
+                        Nguyễn Hoàng Gia Hân
+                    </h3>
+                    <p class="text-xs text-appleSub italic mt-2 leading-relaxed">
+                        "gái đầu hói chỉ nói yêu anh"
+                    </p>
+                    <span class="mt-5 text-xs font-medium text-appleBlue opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        Xem trang cá nhân →
+                    </span>
+                </a>
+
+                <!-- Thành viên 5: Huỳnh Dương Ái My -->
+                <a href="trangmy.html" class="apple-card tilt-card member-card p-6 flex flex-col items-center text-center group">
+                    <div class="w-24 h-24 rounded-full overflow-hidden mb-5 ring-1 ring-black/10 bg-gray-100">
+                        <img src="my.jpg" alt="Huỳnh Dương Ái My" onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80'" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+                    </div>
+                    <h3 class="font-display font-bold text-base text-appleText group-hover:text-appleBlue transition-colors">
+                        Huỳnh Dương Ái My
+                    </h3>
+                    <p class="text-xs text-appleSub italic mt-2 leading-relaxed">
+                        "chạy theo con chó tưởng đó là anh"
+                    </p>
+                    <span class="mt-5 text-xs font-medium text-appleBlue opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        Xem trang cá nhân →
+                    </span>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- 4. DANH SÁCH BÀI TẬP (CẤU TRÚC CHUẨN DỄ DÀNG THÊM BÀI MỚI BẰNG TAY) -->
+        <section id="bai-tap" class="max-w-5xl mx-auto px-6 py-16">
+            <div class="mb-12 reveal-header">
+                <p class="text-xs font-semibold uppercase tracking-widest text-appleBlue mb-2">Lưu trữ học tập</p>
+                <h2 class="font-display text-3xl sm:text-5xl font-bold tracking-tight text-appleText mb-3">Danh sách bài tập.</h2>
+                <p class="text-base text-appleSub">Bấm vào từng chương bài học để mở các bài luyện tập và vận dụng.</p>
+            </div>
+
+            <!-- ===================================================================== -->
+            <!-- HƯỚNG DẪN THÊM BÀI MỚI BẰNG TAY:                                      -->
+            <!-- Muốn thêm Bài 13, 14..., chỉ cần copy nguyên khối <details>...</details> -->
+            <!-- bên dưới, dán xuống cuối danh sách và sửa lại tiêu đề + tên file ảnh. -->
+            <!-- ===================================================================== -->
+
+            <!-- BÀI 10 -->
+            <details class="lesson-box lesson-reveal" open>
+                <summary class="lesson-title">
+                    <div class="flex items-center gap-3.5">
+                        <span class="w-8 h-8 rounded-lg bg-blue-50 text-appleBlue flex items-center justify-center text-sm font-bold">10</span>
+                        <span>Bài 10</span>
+                    </div>
+                    <span class="chevron-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </span>
+                </summary>
+
+                <div class="lesson-content">
+                    <!-- Cục 1 -->
+                    <div class="exercise-item">
+                        <div>
+                            <div class="exercise-thumb-wrap mb-3.5">
+                                <img src="lt1bai10.jpg" alt="Luyện Tập 1 Bài 10" onerror="this.src='https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=500&q=80'">
+                            </div>
+                            <span class="text-xs font-semibold text-appleBlue uppercase tracking-wider">Bài 10</span>
+                            <h3 class="font-display font-bold text-lg text-appleText mt-0.5">Luyện tập 1</h3>
+                        </div>
+                        <a href="lt1bai10.html" class="exercise-btn">Xem bài tập</a>
+                    </div>
+
+                    <!-- Cục 2 -->
+                    <div class="exercise-item">
+                        <div>
+                            <div class="exercise-thumb-wrap mb-3.5">
+                                <img src="lt2bai10.jpg" alt="Luyện Tập 2 Bài 10" onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=80'">
+                            </div>
+                            <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Bài 10</span>
+                            <h3 class="font-display font-bold text-lg text-appleText mt-0.5">Luyện Tập 2</h3>
+                        </div>
+                        <a href="lt2bai10.html" class="exercise-btn">Xem bài tập</a>
+                    </div>
+
+                    <!-- Cục 3 -->
+                    <div class="exercise-item">
+                        <div>
+                            <div class="exercise-thumb-wrap mb-3.5">
+                                <img src="vd2bai10.jpg" alt="Vận dụng 2 bài 10" onerror="this.src='https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=500&q=80'">
+                            </div>
+                            <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Bài 10</span>
+                            <h3 class="font-display font-bold text-lg text-appleText mt-0.5">Vận Dụng 2</h3>
+                        </div>
+                        <a href="vd2bai10.html" class="exercise-btn">Xem bài tập</a>
+                    </div>
+                </div>
+            </details>
+
+            <!-- BÀI 11 -->
+            <details class="lesson-box lesson-reveal">
+                <summary class="lesson-title">
+                    <div class="flex items-center gap-3.5">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm font-bold">11</span>
+                        <span>Bài 11</span>
+                    </div>
+                    <span class="chevron-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </span>
+                </summary>
+
+                <div class="lesson-content">
+                    <!-- Cục 1: Trả lời lý thuyết -->
+                    <div class="exercise-item justify-center bg-amber-50/70 border-amber-200/60">
+                        <div>
+                            <span class="inline-block px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-xs font-semibold mb-3">Ghi chú</span>
+                            <h3 class="font-display font-bold text-lg text-appleText">TRẢ LỜI LUYỆN TẬP 1 BÀI 11</h3>
+                            <p class="text-sm text-appleSub mt-2">Ảnh có kích thước 375px</p>
+                        </div>
+                    </div>
+
+                    <!-- Cục 2: Luyện tập 2 (2 ảnh) -->
+                    <div class="exercise-item">
+                        <div>
+                            <div class="grid grid-cols-2 gap-2 mb-3.5">
+                                <div class="exercise-thumb-wrap">
+                                    <img src="lt2bai11(1).jpg" alt="Luyện Tập 2 Bài 11 (1)" onerror="this.src='https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=300&q=80'">
+                                </div>
+                                <div class="exercise-thumb-wrap">
+                                    <img src="lt2bai11(2).jpg" alt="Luyện Tập 2 Bài 11 (2)" onerror="this.src='https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=300&q=80'">
+                                </div>
+                            </div>
+                            <span class="text-xs font-semibold text-appleBlue uppercase tracking-wider">Bài 11</span>
+                            <h3 class="font-display font-bold text-lg text-appleText mt-0.5">Luyện tập 2</h3>
+                        </div>
+                        <a href="lt2bai11.html" class="exercise-btn">Xem bài tập</a>
+                    </div>
+
+                    <!-- Cục 3: Vận dụng -->
+                    <div class="exercise-item">
+                        <div>
+                            <div class="exercise-thumb-wrap mb-3.5">
+                                <img src="vdbai11.jpg" alt="Vận Dụng Bài 11" onerror="this.src='https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=500&q=80'">
+                            </div>
+                            <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Bài 11</span>
+                            <h3 class="font-display font-bold text-lg text-appleText mt-0.5">Vận Dụng</h3>
+                        </div>
+                        <a href="vdbai11.html" class="exercise-btn">Xem bài tập</a>
+                    </div>
+                </div>
+            </details>
+
+            <!-- BÀI 12 -->
+            <details class="lesson-box lesson-reveal">
+                <summary class="lesson-title">
+                    <div class="flex items-center gap-3.5">
+                        <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-bold">12</span>
+                        <span>Bài 12</span>
+                    </div>
+                    <span class="chevron-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </span>
+                </summary>
+
+                <div class="lesson-content">
+                    <!-- Cục 1 -->
+                    <div class="exercise-item">
+                        <div>
+                            <div class="exercise-thumb-wrap mb-3.5">
+                                <img src="lt1bai12.jpg" alt="Luyện tập Bài 12" onerror="this.src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=500&q=80'">
+                            </div>
+                            <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Bài 12</span>
+                            <h3 class="font-display font-bold text-lg text-appleText mt-0.5">Luyện Tập</h3>
+                        </div>
+                        <a href="lt1bai12.html" class="exercise-btn">Xem bài tập</a>
+                    </div>
+
+                    <!-- Cục 2 -->
+                    <div class="exercise-item">
+                        <div>
+                            <div class="exercise-thumb-wrap mb-3.5">
+                                <img src="vd1bai12.jpg" alt="Vận dụng 1 Bài 12" onerror="this.src='https://images.unsplash.com/photo-1550439062-609e1531270e?auto=format&fit=crop&w=500&q=80'">
+                            </div>
+                            <span class="text-xs font-semibold text-appleBlue uppercase tracking-wider">Bài 12</span>
+                            <h3 class="font-display font-bold text-lg text-appleText mt-0.5">Vận Dụng 1</h3>
+                        </div>
+                        <a href="vd1bai12.html" class="exercise-btn">Xem bài tập</a>
+                    </div>
+
+                    <!-- Cục 3 -->
+                    <div class="exercise-item">
+                        <div>
+                            <div class="exercise-thumb-wrap mb-3.5">
+                                <img src="vd2bai12.jpg" alt="Vận Dụng 2 Bài 12" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80'">
+                            </div>
+                            <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Bài 12</span>
+                            <h3 class="font-display font-bold text-lg text-appleText mt-0.5">Vận Dụng 2</h3>
+                        </div>
+                        <a href="vd2bai12.html" class="exercise-btn">Xem bài tập</a>
+                    </div>
+                </div>
+            </details>
+
+            <!-- ===================================================================== -->
+            <!-- DÁN BÀI MỚI (BÀI 13, BÀI 14...) NGAY BÊN DƯỚI DÒNG NÀY                 -->
+            <!-- ===================================================================== -->
+
+        </section>
+    </main>
+
+    <!-- FOOTER TỐI GIẢN -->
+    <footer class="relative z-10 border-t border-black/5 bg-white/80 backdrop-blur py-10">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-appleSub">
+            <p class="font-medium text-appleText">Nhóm 3 · Lớp 12TT (Chuyên Toán 2024 – 2027)</p>
+            <p>Trường THPT Chuyên Bến Tre</p>
         </div>
-    </div>
+    </footer>
 
+    <!-- HỆ THỐNG CHUYỂN ĐỘNG GSAP & HIGH-CRAFT INTERACTIONS -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Nền Aurora cực quang chuyển động uyển chuyển
+        gsap.to('#orb-1', { x: 80, y: 50, duration: 9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+        gsap.to('#orb-2', { x: -70, y: 60, duration: 11, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+        gsap.to('#orb-3', { x: 60, y: -50, duration: 10, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+        // 2. Hero Staggered Entrance (Mở màn mượt mà chuẩn Apple)
+        window.addEventListener('DOMContentLoaded', () => {
+            const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+
+            tl.to('.hero-badge', { opacity: 1, y: 0, duration: 0.8 })
+              .to('.line-inner', { y: '0%', duration: 1.15, stagger: 0.14 }, '-=0.5')
+              .to('.hero-sub', { opacity: 1, y: 0, duration: 0.9 }, '-=0.7')
+              .to('.hero-cta', { opacity: 1, y: 0, duration: 0.9 }, '-=0.7');
+        });
+
+        // 3. Thanh tiến trình cuộn trên đỉnh trang
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            document.getElementById('scroll-indicator').style.width = progress + '%';
+        });
+
+        // 4. Vòng sáng Ambient đi theo chuột (mượt mà với GSAP quickTo)
+        const cursorGlow = document.getElementById('cursor-glow');
+        const xTo = gsap.quickTo(cursorGlow, "left", { duration: 0.65, ease: "power3" });
+        const yTo = gsap.quickTo(cursorGlow, "top", { duration: 0.65, ease: "power3" });
+
+        window.addEventListener('mousemove', (e) => {
+            xTo(e.clientX);
+            yTo(e.clientY);
+        });
+
+        // 5. Viền cảm biến ánh sáng + Nghiêng 3D tinh tế (3D Perspective Tilt) cho từng thẻ
+        document.querySelectorAll('.apple-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+
+                // Tính góc nghiêng nhẹ 3D chuẩn xác
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -6;
+                const rotateY = ((x - centerX) / centerX) * 6;
+
+                gsap.to(card, {
+                    rotateX: rotateX,
+                    rotateY: rotateY,
+                    transformPerspective: 900,
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    rotateX: 0,
+                    rotateY: 0,
+                    duration: 0.6,
+                    ease: 'power3.out'
+                });
+            });
+        });
+
+        // 6. Nút bấm từ tính (Magnetic Buttons)
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = (e.clientX - rect.left - rect.width / 2) * 0.25;
+                const y = (e.clientY - rect.top - rect.height / 2) * 0.25;
+                gsap.to(btn, { x, y, duration: 0.3, ease: 'power2.out' });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+            });
+        });
+
+        // 7. Băng chuyền chữ ngang tốc độ cuộn (Velocity Scrub Marquee)
+        gsap.to('.marquee-left', {
+            xPercent: -22,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.marquee-left',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.7
+            }
+        });
+
+        gsap.fromTo('.marquee-right',
+            { xPercent: -22 },
+            {
+                xPercent: 0,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.marquee-right',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 0.7
+                }
+            }
+        );
+
+        // 8. Hiệu ứng mở rộng khung ảnh Nhóm Chúng Mình & Parallax bên trong
+        gsap.fromTo('.showcase-wrapper',
+            { scale: 0.91, borderRadius: '44px' },
+            {
+                scale: 1,
+                borderRadius: '26px',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '#nhom-chung-minh',
+                    start: 'top 85%',
+                    end: 'center center',
+                    scrub: 0.8
+                }
+            }
+        );
+
+        gsap.to('.showcase-img', {
+            scale: 1,
+            yPercent: 5,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#nhom-chung-minh',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        // 9. Xuất hiện tiêu đề các khu vực khi cuộn tới
+        gsap.utils.toArray('.reveal-header').forEach(header => {
+            gsap.from(header, {
+                y: 35,
+                opacity: 0,
+                duration: 0.9,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: header,
+                    start: 'top 86%',
+                    once: true
+                }
+            });
+        });
+
+        // 10. Xuất hiện đồng đều 5 thành viên theo nhịp (Staggered Cascade)
+        gsap.from('.member-card', {
+            y: 45,
+            opacity: 0,
+            duration: 0.85,
+            stagger: 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: '#members-grid',
+                start: 'top 84%',
+                once: true
+            }
+        });
+
+        // 11. Xuất hiện các khối bài tập và hiệu ứng trượt mượt khi mở Accordion
+        gsap.from('.lesson-reveal', {
+            y: 35,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.14,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: '#bai-tap',
+                start: 'top 84%',
+                once: true
+            }
+        });
+
+        document.querySelectorAll('details.lesson-box').forEach(detail => {
+            detail.addEventListener('toggle', () => {
+                if (detail.open) {
+                    const items = detail.querySelectorAll('.exercise-item');
+                    gsap.fromTo(items,
+                        { y: 20, opacity: 0, scale: 0.98 },
+                        { y: 0, opacity: 1, scale: 1, duration: 0.5, stagger: 0.08, ease: 'power3.out' }
+                    );
+                }
+            });
+        });
+    </script>
 </body>
 </html>
