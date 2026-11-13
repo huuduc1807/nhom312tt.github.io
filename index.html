@@ -17,6 +17,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
+    <!-- jQuery & Ripple Plugin cho hiệu ứng sóng nước mặt hồ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.ripples@0.6.3/dist/jquery.ripples-min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -82,7 +86,7 @@
             will-change: transform;
         }
 
-        /* Luồng ánh sáng cảm biến đi theo con trỏ chuột */
+        /* Vòng sáng cảm biến đi theo con trỏ chuột */
         #cursor-glow {
             position: fixed;
             width: 650px;
@@ -151,25 +155,44 @@
             will-change: transform;
         }
 
-        /* Khung ảnh Nhóm Chúng Mình mở rộng mượt theo cuộn trang */
+        /* Khung ảnh Nhóm Chúng Mình (Thu nhỏ lại 1 nửa, bo góc hoàn hảo & Parallax) */
         .showcase-wrapper {
-            border-radius: 36px;
+            border-radius: 28px;
             overflow: hidden;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
             transform-origin: center center;
-            will-change: transform, border-radius;
+            will-change: transform;
         }
 
         .showcase-img {
             will-change: transform;
-            transform: scale(1.14);
+            transform: scale(1.08);
         }
 
-        /* Dải chữ chạy ngang tốc độ cuộn (Velocity Marquee) */
+        /* Dải chữ chạy Liquid Glass nổi bật, sắc nét */
+        .liquid-marquee-container {
+            position: relative;
+            padding: 16px 0;
+            background: linear-gradient(90deg, rgba(0,102,204,0.03), rgba(94,92,230,0.06), rgba(0,102,204,0.03));
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(8px);
+            overflow: hidden;
+        }
         .marquee-track {
             display: flex;
             white-space: nowrap;
             will-change: transform;
+        }
+        .liquid-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 2.75rem;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #0066cc 0%, #5e5ce6 50%, #af52de 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0, 102, 204, 0.15);
         }
 
         /* Kho bài tập Accordion chuẩn chỉnh, dễ thêm bằng tay */
@@ -309,7 +332,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #86868b; }
     </style>
 </head>
-<body class="selection:bg-blue-600 selection:text-white">
+<body class="selection:bg-blue-600 selection:text-white" id="water-ripple-container">
 
     <!-- Thanh tiến trình cuộn -->
     <div id="scroll-indicator"></div>
@@ -346,7 +369,7 @@
     <!-- NỘI DUNG CHÍNH -->
     <main class="relative z-10 pt-28 pb-24">
 
-        <!-- 1. HERO SECTION (KINETIC SPLIT-TEXT & PARALLAX) -->
+        <!-- 1. HERO SECTION -->
         <section class="max-w-5xl mx-auto px-6 pt-8 pb-16 text-center">
             <div class="hero-badge inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur border border-black/5 shadow-sm text-xs font-semibold text-appleSub mb-7 opacity-0 translate-y-4">
                 <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
@@ -372,35 +395,36 @@
             </div>
         </section>
 
-        <!-- DẢI CHỮ CHẠY NGANG THEO TỐC ĐỘ CUỘN (DUAL VELOCITY MARQUEE) -->
-        <div class="py-5 overflow-hidden select-none pointer-events-none opacity-45">
-            <div class="marquee-track marquee-left font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-black/[0.045] uppercase">
-                <span class="mx-6">NHÓM 3 · LỚP 12TT</span> •
-                <span class="mx-6">CHUYÊN TOÁN 2024 – 2027</span> •
-                <span class="mx-6">THPT CHUYÊN BẾN TRE</span> •
-                <span class="mx-6">NHÓM 3 · LỚP 12TT</span> •
-                <span class="mx-6">CHUYÊN TOÁN 2024 – 2027</span> •
-            </div>
-            <div class="marquee-track marquee-right font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-blue-900/[0.045] uppercase mt-1">
-                <span class="mx-6">BẢO NAM · HỮU ĐỨC · THANH NHƯ · GIA HÂN · ÁI MY</span> •
-                <span class="mx-6">BẢO NAM · HỮU ĐỨC · THANH NHƯ · GIA HÂN · ÁI MY</span> •
+        <!-- LIQUID GLASS / NEON AURORA MARQUEE (Nổi bật, rực rỡ không bị chìm) -->
+        <div class="liquid-marquee-container my-6">
+            <div class="marquee-track marquee-left">
+                <span class="liquid-text mx-6">NHÓM 3 · LỚP 12TT</span>
+                <span class="mx-4 text-blue-500 font-bold">✦</span>
+                <span class="liquid-text mx-6">CHUYÊN TOÁN 2024 – 2027</span>
+                <span class="mx-4 text-indigo-500 font-bold">✦</span>
+                <span class="liquid-text mx-6">THPT CHUYÊN BẾN TRE</span>
+                <span class="mx-4 text-purple-500 font-bold">✦</span>
+                <span class="liquid-text mx-6">NHÓM 3 · LỚP 12TT</span>
+                <span class="mx-4 text-blue-500 font-bold">✦</span>
+                <span class="liquid-text mx-6">CHUYÊN TOÁN 2024 – 2027</span>
+                <span class="mx-4 text-indigo-500 font-bold">✦</span>
             </div>
         </div>
 
-        <!-- 2. NHÓM CHÚNG MÌNH (APPLE SCROLL-DRIVEN EXPANSION & INTERNAL PARALLAX) -->
-        <section id="nhom-chung-minh" class="max-w-6xl mx-auto px-6 py-16">
+        <!-- 2. NHÓM CHÚNG MÌNH (Đã thu nhỏ lại 1 nửa so với trước) -->
+        <section id="nhom-chung-minh" class="max-w-3xl mx-auto px-6 py-16">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 reveal-header">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-widest text-appleBlue mb-2">Tập thể</p>
                     <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-appleText">Nhóm Chúng Mình</h2>
                 </div>
-                <p class="text-sm text-appleSub max-w-sm">
-                    Năm mảnh ghép với năm cá tính riêng biệt cùng học tập và ghi dấu tại Chuyên Toán 2024 – 2027.
+                <p class="text-sm text-appleSub max-w-xs">
+                    Năm mảnh ghép cùng học tập và ghi dấu tại Chuyên Toán 2024 – 2027.
                 </p>
             </div>
 
-            <div class="showcase-wrapper bg-gray-200 aspect-[16/9] max-h-[620px] w-full relative">
-                <img src="nhom.jpg" alt="Nhóm Chúng Mình - Nhóm 3 12TT" onerror="this.src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=85'" class="showcase-img w-full h-full object-cover">
+            <div class="showcase-wrapper bg-gray-200 aspect-[16/9] max-h-[380px] w-full relative">
+                <img src="nhom.jpg" alt="Nhóm Chúng Mình - Nhóm 3 12TT" onerror="this.src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1000&q=85'" class="showcase-img w-full h-full object-cover">
             </div>
         </section>
 
@@ -681,8 +705,22 @@
         </div>
     </footer>
 
-    <!-- HỆ THỐNG CHUYỂN ĐỘNG GSAP & HIGH-CRAFT INTERACTIONS -->
+    <!-- HỆ THỐNG CHUYỂN ĐỘNG GSAP & RIPPLE WATER EFFECT -->
     <script>
+        // Kích hoạt hiệu ứng sóng nước mặt hồ toàn trang bằng jQuery Ripples
+        $(document).ready(function() {
+            try {
+                $('#water-ripple-container').ripples({
+                    resolution: 512,
+                    dropRadius: 20,
+                    perturbance: 0.03,
+                    interactive: true
+                });
+            } catch (e) {
+                console.log("Ripples initialized fallback");
+            }
+        });
+
         gsap.registerPlugin(ScrollTrigger);
 
         // 1. Nền Aurora cực quang chuyển động uyển chuyển
@@ -690,7 +728,7 @@
         gsap.to('#orb-2', { x: -70, y: 60, duration: 11, repeat: -1, yoyo: true, ease: 'sine.inOut' });
         gsap.to('#orb-3', { x: 60, y: -50, duration: 10, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 
-        // 2. Hero Staggered Entrance (Mở màn mượt mà chuẩn Apple)
+        // 2. Hero Staggered Entrance
         window.addEventListener('DOMContentLoaded', () => {
             const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
@@ -708,7 +746,7 @@
             document.getElementById('scroll-indicator').style.width = progress + '%';
         });
 
-        // 4. Vòng sáng Ambient đi theo chuột (mượt mà với GSAP quickTo)
+        // 4. Vòng sáng Ambient đi theo chuột
         const cursorGlow = document.getElementById('cursor-glow');
         const xTo = gsap.quickTo(cursorGlow, "left", { duration: 0.65, ease: "power3" });
         const yTo = gsap.quickTo(cursorGlow, "top", { duration: 0.65, ease: "power3" });
@@ -718,7 +756,7 @@
             yTo(e.clientY);
         });
 
-        // 5. Viền cảm biến ánh sáng + Nghiêng 3D tinh tế (3D Perspective Tilt) cho từng thẻ
+        // 5. Viền cảm biến ánh sáng + Nghiêng 3D tinh tế cho từng thẻ
         document.querySelectorAll('.apple-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
@@ -728,7 +766,6 @@
                 card.style.setProperty('--mouse-x', `${x}px`);
                 card.style.setProperty('--mouse-y', `${y}px`);
 
-                // Tính góc nghiêng nhẹ 3D chuẩn xác
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 const rotateX = ((y - centerY) / centerY) * -6;
@@ -766,38 +803,24 @@
             });
         });
 
-        // 7. Băng chuyền chữ ngang tốc độ cuộn (Velocity Scrub Marquee)
+        // 7. Băng chuyền chữ Liquid Glass ngang
         gsap.to('.marquee-left', {
-            xPercent: -22,
+            xPercent: -35,
             ease: 'none',
             scrollTrigger: {
-                trigger: '.marquee-left',
+                trigger: '.liquid-marquee-container',
                 start: 'top bottom',
                 end: 'bottom top',
-                scrub: 0.7
+                scrub: 0.6
             }
         });
 
-        gsap.fromTo('.marquee-right',
-            { xPercent: -22 },
-            {
-                xPercent: 0,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: '.marquee-right',
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 0.7
-                }
-            }
-        );
-
-        // 8. Hiệu ứng mở rộng khung ảnh Nhóm Chúng Mình & Parallax bên trong
+        // 8. Hiệu ứng thu nhỏ và Parallax cho ảnh Nhóm Chúng Mình
         gsap.fromTo('.showcase-wrapper',
-            { scale: 0.91, borderRadius: '44px' },
+            { scale: 0.93, borderRadius: '36px' },
             {
                 scale: 1,
-                borderRadius: '26px',
+                borderRadius: '28px',
                 ease: 'none',
                 scrollTrigger: {
                     trigger: '#nhom-chung-minh',
@@ -810,7 +833,7 @@
 
         gsap.to('.showcase-img', {
             scale: 1,
-            yPercent: 5,
+            yPercent: 4,
             ease: 'none',
             scrollTrigger: {
                 trigger: '#nhom-chung-minh',
@@ -820,7 +843,7 @@
             }
         });
 
-        // 9. Xuất hiện tiêu đề các khu vực khi cuộn tới
+        // 9. Xuất hiện tiêu đề & các thành viên
         gsap.utils.toArray('.reveal-header').forEach(header => {
             gsap.from(header, {
                 y: 35,
@@ -835,7 +858,6 @@
             });
         });
 
-        // 10. Xuất hiện đồng đều 5 thành viên theo nhịp (Staggered Cascade)
         gsap.from('.member-card', {
             y: 45,
             opacity: 0,
@@ -849,7 +871,6 @@
             }
         });
 
-        // 11. Xuất hiện các khối bài tập và hiệu ứng trượt mượt khi mở Accordion
         gsap.from('.lesson-reveal', {
             y: 35,
             opacity: 0,
