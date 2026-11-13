@@ -17,10 +17,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-    <!-- jQuery & Advanced Ripples Plugin cho hiệu ứng nước thật -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ripples/0.5.3/jquery.ripples.min.js"></script>
-
     <script>
         tailwind.config = {
             theme: {
@@ -69,33 +65,33 @@
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         }
 
-        /* Nền Aurora cực quang chuyển động mềm mại */
+        /* Nền Aurora cực quang có gắn bộ lọc khúc xạ sóng nước thật */
         .aurora-layer {
             position: fixed;
             inset: 0;
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
+            filter: url(#real-water-refraction);
         }
         .aurora-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.4;
+            filter: blur(95px);
+            opacity: 0.55;
             will-change: transform;
         }
 
-        /* Vòng sáng cảm biến đi theo con trỏ chuột */
-        #cursor-glow {
+        /* Lớp Canvas sóng nước trong suốt phủ toàn màn hình (không cản thao tác bấm) */
+        #water-surface-canvas {
             position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 102, 204, 0.07) 0%, rgba(94, 92, 230, 0.03) 40%, transparent 70%);
-            transform: translate(-50%, -50%);
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
-            z-index: 1;
-            will-change: left, top;
+            z-index: 40;
+            mix-blend-mode: overlay;
+            opacity: 0.85;
         }
 
         /* Thẻ Bento tinh tế có viền cảm biến ánh sáng & chiều sâu 3D */
@@ -154,7 +150,7 @@
             will-change: transform;
         }
 
-        /* Khung ảnh Nhóm Chúng Mình (Thu nhỏ lại 1 nửa, bo góc hoàn hảo) */
+        /* Khung ảnh Nhóm Chúng Mình */
         .showcase-wrapper {
             border-radius: 28px;
             overflow: hidden;
@@ -191,7 +187,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 15px 25px rgba(0, 102, 204, 0.25)) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.1));
-            transition: filter 0.3s ease;
         }
 
         /* Kho bài tập Accordion chuẩn chỉnh, dễ thêm bằng tay */
@@ -324,27 +319,36 @@
             transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Thanh cuộn tinh gọn */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #fbfbfd; }
         ::-webkit-scrollbar-thumb { background: #d2d2d7; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #86868b; }
     </style>
 </head>
-<body class="selection:bg-blue-600 selection:text-white" id="water-ripple-container">
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <!-- BỘ LỌC KHÚC XẠ SÓNG NƯỚC VẬT LÝ (SVG DISPLACEMENT FILTER) -->
+    <svg class="hidden">
+        <defs>
+            <filter id="real-water-refraction" x="-10%" y="-10%" width="120%" height="120%">
+                <feTurbulence id="water-turbulence" type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="3" result="noise" />
+                <feDisplacementMap id="water-displacement" in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+        </defs>
+    </svg>
 
     <!-- Thanh tiến trình cuộn -->
     <div id="scroll-indicator"></div>
 
-    <!-- Nền Aurora cực quang chuyển động mượt -->
+    <!-- Nền Aurora cực quang bị bẻ cong khúc xạ bởi sóng nước -->
     <div class="aurora-layer">
-        <div class="aurora-orb w-[520px] h-[520px] bg-blue-300/40 -top-24 -left-24" id="orb-1"></div>
-        <div class="aurora-orb w-[480px] h-[480px] bg-indigo-300/35 top-1/3 -right-24" id="orb-2"></div>
-        <div class="aurora-orb w-[500px] h-[500px] bg-sky-200/45 -bottom-24 left-1/4" id="orb-3"></div>
+        <div class="aurora-orb w-[560px] h-[560px] bg-blue-300/45 -top-24 -left-24" id="orb-1"></div>
+        <div class="aurora-orb w-[500px] h-[500px] bg-indigo-300/40 top-1/3 -right-24" id="orb-2"></div>
+        <div class="aurora-orb w-[540px] h-[540px] bg-sky-200/50 -bottom-24 left-1/4" id="orb-3"></div>
     </div>
 
-    <!-- Vòng sáng cảm biến theo chuột -->
-    <div id="cursor-glow"></div>
+    <!-- MẶT NƯỚC 2D VẬT LÝ TRONG SUỐT PHẢN CHIẾU ÁNH SÁNG -->
+    <canvas id="water-surface-canvas"></canvas>
 
     <!-- THANH ĐIỀU HƯỚNG TỐI GIẢN -->
     <nav class="frosted-nav fixed top-0 inset-x-0 z-50">
@@ -394,7 +398,7 @@
             </div>
         </section>
 
-        <!-- LIQUID GLASS MARQUEE KHÔNG KHUNG (Tích hợp nhiều tên và nổi khối 3D) -->
+        <!-- LIQUID GLASS MARQUEE KHÔNG KHUNG NỔI KHỐI 3D -->
         <div class="liquid-marquee-wrapper my-6">
             <div class="marquee-track marquee-left">
                 <span class="liquid-glass-text mx-6">NHÓM 3 · LỚP 12TT</span>
@@ -416,7 +420,7 @@
             </div>
         </div>
 
-        <!-- 2. NHÓM CHÚNG MÌNH (Đã thu nhỏ lại 1 nửa, bo góc hoàn hảo) -->
+        <!-- 2. NHÓM CHÚNG MÌNH -->
         <section id="nhom-chung-minh" class="max-w-3xl mx-auto px-6 py-16">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 reveal-header">
                 <div>
@@ -433,7 +437,7 @@
             </div>
         </section>
 
-        <!-- 3. THÀNH VIÊN NHÓM (5 THẺ BÌNH ĐẲNG TUYỆT ĐỐI + 3D PERSPECTIVE TILT) -->
+        <!-- 3. THÀNH VIÊN NHÓM -->
         <section id="thanh-vien" class="max-w-6xl mx-auto px-6 py-20">
             <div class="text-center max-w-2xl mx-auto mb-14 reveal-header">
                 <p class="text-xs font-semibold uppercase tracking-widest text-appleBlue mb-2">Đội hình</p>
@@ -526,7 +530,7 @@
             </div>
         </section>
 
-        <!-- 4. DANH SÁCH BÀI TẬP (CẤU TRÚC CHUẨN DỄ DÀNG THÊM BÀI MỚI BẰNG TAY) -->
+        <!-- 4. DANH SÁCH BÀI TẬP -->
         <section id="bai-tap" class="max-w-5xl mx-auto px-6 py-16">
             <div class="mb-12 reveal-header">
                 <p class="text-xs font-semibold uppercase tracking-widest text-appleBlue mb-2">Lưu trữ học tập</p>
@@ -710,40 +714,154 @@
         </div>
     </footer>
 
-    <!-- HỆ THỐNG CHUYỂN ĐỘNG GSAP & ADVANCED WATER RIPPLE ENGINE -->
+    <!-- HỆ THỐNG CHUYỂN ĐỘNG GSAP & 2D REAL-TIME WATER PHYSICS SIMULATION -->
     <script>
-        // Cấu hình hiệu ứng sóng nước mặt hồ thực tế cao cấp
-        $(document).ready(function() {
-            try {
-                $('#water-ripple-container').ripples({
-                    resolution: 256,
-                    dropRadius: 25,
-                    perturbance: 0.04,
-                    interactive: true
-                });
+        /* ============================================================================
+           1. HỆ THỐNG MÔ PHỎNG MẶT NƯỚC VẬT LÝ 2D (REAL-TIME HEIGHTMAP & CAUSTIC LIGHT)
+              - Không tạo chấm màu phẳng; tính toán dao động độ cao từng điểm ảnh,
+                tạo tia sáng phản xạ viền sóng trong suốt như chạm tay vào mặt nước thật.
+           ============================================================================ */
+        (function initRealWaterPhysics() {
+            const canvas = document.getElementById('water-surface-canvas');
+            const ctx = canvas.getContext('2d');
+            const scaleFactor = 3; // Tối ưu mượt 60fps toàn màn hình
+            let width, height, cols, rows;
+            let current, previous;
+            const damping = 0.965; // Độ lan tỏa và tắt dần tự nhiên của sóng nước
 
-                // Tự động tạo gợn sóng nhẹ ngẫu nhiên tạo sinh khí cho mặt nước
-                setInterval(function() {
-                    var $el = $('#water-ripple-container');
-                    var x = Math.random() * $el.outerWidth();
-                    var y = Math.random() * $el.outerHeight();
-                    var dropRadius = 20;
-                    var strength = 0.02 + Math.random() * 0.02;
-                    $el.ripples('drop', x, y, dropRadius, strength);
-                }, 4500);
-            } catch (e) {
-                console.log("Ripple fallback active");
+            function resize() {
+                width = canvas.width = Math.floor(window.innerWidth / scaleFactor);
+                height = canvas.height = Math.floor(window.innerHeight / scaleFactor);
+                cols = width;
+                rows = height;
+                current = new Float32Array(cols * rows);
+                previous = new Float32Array(cols * rows);
             }
-        });
 
+            window.addEventListener('resize', resize);
+            resize();
+
+            function disturb(x, y, radius, strength) {
+                const cx = Math.floor(x / scaleFactor);
+                const cy = Math.floor(y / scaleFactor);
+                for (let j = cy - radius; j < cy + radius; j++) {
+                    for (let i = cx - radius; i < cx + radius; i++) {
+                        if (i > 1 && i < cols - 1 && j > 1 && j < rows - 1) {
+                            const dx = i - cx;
+                            const dy = j - cy;
+                            const distSq = dx * dx + dy * dy;
+                            if (distSq < radius * radius) {
+                                const falloff = 1 - Math.sqrt(distSq) / radius;
+                                previous[j * cols + i] += strength * falloff;
+                            }
+                        }
+                    }
+                }
+            }
+
+            let lastX = -1, lastY = -1;
+            window.addEventListener('mousemove', (e) => {
+                if (lastX !== -1) {
+                    const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+                    const steps = Math.min(Math.ceil(dist / 8), 10);
+                    for (let s = 1; s <= steps; s++) {
+                        const ix = lastX + ((e.clientX - lastX) * s) / steps;
+                        const iy = lastY + ((e.clientY - lastY) * s) / steps;
+                        disturb(ix, iy, 5, 220);
+                    }
+                } else {
+                    disturb(e.clientX, e.clientY, 5, 220);
+                }
+                lastX = e.clientX;
+                lastY = e.clientY;
+            });
+
+            window.addEventListener('mousedown', (e) => {
+                disturb(e.clientX, e.clientY, 10, 480);
+            });
+
+            // Điều biến nhẹ bộ lọc khúc xạ SVG để lớp nền uốn lượn tự nhiên
+            const turbulence = document.getElementById('water-turbulence');
+            let frameTime = 0;
+
+            function renderWater() {
+                frameTime += 0.015;
+                if (turbulence) {
+                    const bfX = 0.011 + Math.sin(frameTime) * 0.002;
+                    const bfY = 0.016 + Math.cos(frameTime * 0.8) * 0.002;
+                    turbulence.setAttribute('baseFrequency', `${bfX.toFixed(4)} ${bfY.toFixed(4)}`);
+                }
+
+                const imgData = ctx.createImageData(cols, rows);
+                const data = imgData.data;
+
+                for (let y = 1; y < rows - 1; y++) {
+                    const rowOffset = y * cols;
+                    for (let x = 1; x < cols - 1; x++) {
+                        const idx = rowOffset + x;
+
+                        // Phương trình truyền sóng 2D chuẩn xác
+                        let val = (
+                            previous[idx - 1] +
+                            previous[idx + 1] +
+                            previous[idx - cols] +
+                            previous[idx + cols]
+                        ) * 0.5 - current[idx];
+
+                        val *= damping;
+                        current[idx] = val;
+
+                        // Tính độ dốc bề mặt (Normal vector) để tạo ánh sáng khúc xạ trong suốt
+                        const dx = current[idx - 1] - current[idx + 1];
+                        const dy = current[idx - cols] - current[idx + cols];
+                        const slope = Math.abs(dx) + Math.abs(dy);
+
+                        const pIdx = idx * 4;
+                        if (slope > 0.35) {
+                            const highlight = dx + dy;
+                            if (highlight > 0) {
+                                // Viền sáng phản chiếu ánh nắng trên đỉnh sóng trong suốt
+                                data[pIdx] = 255;
+                                data[pIdx + 1] = 255;
+                                data[pIdx + 2] = 255;
+                                data[pIdx + 3] = Math.min(slope * 1.35, 130);
+                            } else {
+                                // Bóng khúc xạ chiều sâu đáy sóng tinh tế
+                                data[pIdx] = 175;
+                                data[pIdx + 1] = 205;
+                                data[pIdx + 2] = 245;
+                                data[pIdx + 3] = Math.min(slope * 0.95, 85);
+                            }
+                        } else {
+                            data[pIdx + 3] = 0; // Hoàn toàn trong suốt khi mặt nước phẳng
+                        }
+                    }
+                }
+
+                ctx.putImageData(imgData, 0, 0);
+
+                // Hoán đổi bộ đệm sóng
+                const temp = previous;
+                previous = current;
+                current = temp;
+
+                requestAnimationFrame(renderWater);
+            }
+
+            renderWater();
+        })();
+
+        /* ============================================================================
+           2. HỆ THỐNG CHUYỂN ĐỘNG GSAP & SCROLLTRIGGER
+           ============================================================================ */
         gsap.registerPlugin(ScrollTrigger);
 
-        // 1. Nền Aurora cực quang chuyển động uyển chuyển
+        // Nền Aurora cực quang chuyển động uyển chuyển
         gsap.to('#orb-1', { x: 80, y: 50, duration: 9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
         gsap.to('#orb-2', { x: -70, y: 60, duration: 11, repeat: -1, yoyo: true, ease: 'sine.inOut' });
         gsap.to('#orb-3', { x: 60, y: -50, duration: 10, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 
-        // 2. Hero Staggered Entrance
+        // Hero Staggered Entrance
         window.addEventListener('DOMContentLoaded', () => {
             const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
@@ -753,7 +871,7 @@
               .to('.hero-cta', { opacity: 1, y: 0, duration: 0.9 }, '-=0.7');
         });
 
-        // 3. Thanh tiến trình cuộn trên đỉnh trang
+        // Thanh tiến trình cuộn trên đỉnh trang
         window.addEventListener('scroll', () => {
             const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
             const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -761,17 +879,7 @@
             document.getElementById('scroll-indicator').style.width = progress + '%';
         });
 
-        // 4. Vòng sáng Ambient đi theo chuột
-        const cursorGlow = document.getElementById('cursor-glow');
-        const xTo = gsap.quickTo(cursorGlow, "left", { duration: 0.65, ease: "power3" });
-        const yTo = gsap.quickTo(cursorGlow, "top", { duration: 0.65, ease: "power3" });
-
-        window.addEventListener('mousemove', (e) => {
-            xTo(e.clientX);
-            yTo(e.clientY);
-        });
-
-        // 5. Viền cảm biến ánh sáng + Nghiêng 3D tinh tế cho từng thẻ
+        // Viền cảm biến ánh sáng + Nghiêng 3D tinh tế cho từng thẻ
         document.querySelectorAll('.apple-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
@@ -805,7 +913,7 @@
             });
         });
 
-        // 6. Nút bấm từ tính (Magnetic Buttons)
+        // Nút bấm từ tính (Magnetic Buttons)
         document.querySelectorAll('.magnetic-btn').forEach(btn => {
             btn.addEventListener('mousemove', (e) => {
                 const rect = btn.getBoundingClientRect();
@@ -818,9 +926,9 @@
             });
         });
 
-        // 7. Băng chuyền chữ Liquid Glass ngang không khung
+        // Băng chuyền chữ Liquid Glass ngang không khung
         gsap.to('.marquee-left', {
-            xPercent: -35,
+            xPercent: -42,
             ease: 'none',
             scrollTrigger: {
                 trigger: '.liquid-marquee-wrapper',
@@ -830,7 +938,7 @@
             }
         });
 
-        // 8. Hiệu ứng thu nhỏ và Parallax cho ảnh Nhóm Chúng Mình
+        // Hiệu ứng thu nhỏ và Parallax cho ảnh Nhóm Chúng Mình
         gsap.fromTo('.showcase-wrapper',
             { scale: 0.93, borderRadius: '36px' },
             {
@@ -858,7 +966,7 @@
             }
         });
 
-        // 9. Xuất hiện tiêu đề & các thành viên
+        // Xuất hiện tiêu đề & các thành viên
         gsap.utils.toArray('.reveal-header').forEach(header => {
             gsap.from(header, {
                 y: 35,
