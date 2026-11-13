@@ -8,7 +8,7 @@
     <!-- Google Fonts: Plus Jakarta Sans & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,9 +17,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-    <!-- jQuery & Ripple Plugin cho hiệu ứng sóng nước mặt hồ -->
+    <!-- jQuery & Advanced Ripples Plugin cho hiệu ứng nước thật -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery.ripples@0.6.3/dist/jquery.ripples-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ripples/0.5.3/jquery.ripples.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -34,7 +34,6 @@
                         appleText: '#1d1d1f',
                         appleSub: '#6e6e73',
                         appleBlue: '#0066cc',
-                        appleBorder: 'rgba(0, 0, 0, 0.08)'
                     }
                 }
             }
@@ -50,7 +49,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Thanh tiến trình đọc mượt mà trên đỉnh màn hình */
+        /* Thanh tiến trình đọc trên đỉnh màn hình */
         #scroll-indicator {
             position: fixed;
             top: 0;
@@ -81,18 +80,18 @@
         .aurora-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(110px);
-            opacity: 0.45;
+            filter: blur(120px);
+            opacity: 0.4;
             will-change: transform;
         }
 
         /* Vòng sáng cảm biến đi theo con trỏ chuột */
         #cursor-glow {
             position: fixed;
-            width: 650px;
-            height: 650px;
+            width: 600px;
+            height: 600px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 102, 204, 0.08) 0%, rgba(94, 92, 230, 0.04) 40%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 102, 204, 0.07) 0%, rgba(94, 92, 230, 0.03) 40%, transparent 70%);
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 1;
@@ -155,7 +154,7 @@
             will-change: transform;
         }
 
-        /* Khung ảnh Nhóm Chúng Mình (Thu nhỏ lại 1 nửa, bo góc hoàn hảo & Parallax) */
+        /* Khung ảnh Nhóm Chúng Mình (Thu nhỏ lại 1 nửa, bo góc hoàn hảo) */
         .showcase-wrapper {
             border-radius: 28px;
             overflow: hidden;
@@ -169,30 +168,30 @@
             transform: scale(1.08);
         }
 
-        /* Dải chữ chạy Liquid Glass nổi bật, sắc nét */
-        .liquid-marquee-container {
+        /* Dải chữ chạy LIQUID GLASS KHÔNG KHUNG nổi khối 3D siêu thực */
+        .liquid-marquee-wrapper {
             position: relative;
-            padding: 16px 0;
-            background: linear-gradient(90deg, rgba(0,102,204,0.03), rgba(94,92,230,0.06), rgba(0,102,204,0.03));
-            border-top: 1px solid rgba(0, 0, 0, 0.04);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-            backdrop-filter: blur(8px);
+            padding: 24px 0;
             overflow: hidden;
+            background: transparent;
+            user-select: none;
+            pointer-events: none;
         }
         .marquee-track {
             display: flex;
             white-space: nowrap;
             will-change: transform;
         }
-        .liquid-text {
+        .liquid-glass-text {
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 800;
-            font-size: 2.75rem;
+            font-size: 3rem;
             letter-spacing: -0.03em;
-            background: linear-gradient(135deg, #0066cc 0%, #5e5ce6 50%, #af52de 100%);
+            background: linear-gradient(135deg, #0066cc 0%, #5e5ce6 35%, #ff2d55 70%, #af52de 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 30px rgba(0, 102, 204, 0.15);
+            filter: drop-shadow(0 15px 25px rgba(0, 102, 204, 0.25)) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.1));
+            transition: filter 0.3s ease;
         }
 
         /* Kho bài tập Accordion chuẩn chỉnh, dễ thêm bằng tay */
@@ -395,23 +394,29 @@
             </div>
         </section>
 
-        <!-- LIQUID GLASS / NEON AURORA MARQUEE (Nổi bật, rực rỡ không bị chìm) -->
-        <div class="liquid-marquee-container my-6">
+        <!-- LIQUID GLASS MARQUEE KHÔNG KHUNG (Tích hợp nhiều tên và nổi khối 3D) -->
+        <div class="liquid-marquee-wrapper my-6">
             <div class="marquee-track marquee-left">
-                <span class="liquid-text mx-6">NHÓM 3 · LỚP 12TT</span>
-                <span class="mx-4 text-blue-500 font-bold">✦</span>
-                <span class="liquid-text mx-6">CHUYÊN TOÁN 2024 – 2027</span>
-                <span class="mx-4 text-indigo-500 font-bold">✦</span>
-                <span class="liquid-text mx-6">THPT CHUYÊN BẾN TRE</span>
-                <span class="mx-4 text-purple-500 font-bold">✦</span>
-                <span class="liquid-text mx-6">NHÓM 3 · LỚP 12TT</span>
-                <span class="mx-4 text-blue-500 font-bold">✦</span>
-                <span class="liquid-text mx-6">CHUYÊN TOÁN 2024 – 2027</span>
-                <span class="mx-4 text-indigo-500 font-bold">✦</span>
+                <span class="liquid-glass-text mx-6">NHÓM 3 · LỚP 12TT</span>
+                <span class="mx-4 text-pink-500 font-bold text-2xl">✦</span>
+                <span class="liquid-glass-text mx-6">BẢO NAM</span>
+                <span class="mx-4 text-blue-500 font-bold text-2xl">✦</span>
+                <span class="liquid-glass-text mx-6">HỮU ĐỨC</span>
+                <span class="mx-4 text-indigo-500 font-bold text-2xl">✦</span>
+                <span class="liquid-glass-text mx-6">THANH NHƯ</span>
+                <span class="mx-4 text-purple-500 font-bold text-2xl">✦</span>
+                <span class="liquid-glass-text mx-6">GIA HÂN</span>
+                <span class="mx-4 text-pink-500 font-bold text-2xl">✦</span>
+                <span class="liquid-glass-text mx-6">ÁI MY</span>
+                <span class="mx-4 text-blue-500 font-bold text-2xl">✦</span>
+                <span class="liquid-glass-text mx-6">CHUYÊN TOÁN 2024 – 2027</span>
+                <span class="mx-4 text-emerald-500 font-bold text-2xl">✦</span>
+                <span class="liquid-glass-text mx-6">THPT CHUYÊN BẾN TRE</span>
+                <span class="mx-4 text-purple-500 font-bold text-2xl">✦</span>
             </div>
         </div>
 
-        <!-- 2. NHÓM CHÚNG MÌNH (Đã thu nhỏ lại 1 nửa so với trước) -->
+        <!-- 2. NHÓM CHÚNG MÌNH (Đã thu nhỏ lại 1 nửa, bo góc hoàn hảo) -->
         <section id="nhom-chung-minh" class="max-w-3xl mx-auto px-6 py-16">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 reveal-header">
                 <div>
@@ -705,19 +710,29 @@
         </div>
     </footer>
 
-    <!-- HỆ THỐNG CHUYỂN ĐỘNG GSAP & RIPPLE WATER EFFECT -->
+    <!-- HỆ THỐNG CHUYỂN ĐỘNG GSAP & ADVANCED WATER RIPPLE ENGINE -->
     <script>
-        // Kích hoạt hiệu ứng sóng nước mặt hồ toàn trang bằng jQuery Ripples
+        // Cấu hình hiệu ứng sóng nước mặt hồ thực tế cao cấp
         $(document).ready(function() {
             try {
                 $('#water-ripple-container').ripples({
-                    resolution: 512,
-                    dropRadius: 20,
-                    perturbance: 0.03,
+                    resolution: 256,
+                    dropRadius: 25,
+                    perturbance: 0.04,
                     interactive: true
                 });
+
+                // Tự động tạo gợn sóng nhẹ ngẫu nhiên tạo sinh khí cho mặt nước
+                setInterval(function() {
+                    var $el = $('#water-ripple-container');
+                    var x = Math.random() * $el.outerWidth();
+                    var y = Math.random() * $el.outerHeight();
+                    var dropRadius = 20;
+                    var strength = 0.02 + Math.random() * 0.02;
+                    $el.ripples('drop', x, y, dropRadius, strength);
+                }, 4500);
             } catch (e) {
-                console.log("Ripples initialized fallback");
+                console.log("Ripple fallback active");
             }
         });
 
@@ -803,12 +818,12 @@
             });
         });
 
-        // 7. Băng chuyền chữ Liquid Glass ngang
+        // 7. Băng chuyền chữ Liquid Glass ngang không khung
         gsap.to('.marquee-left', {
             xPercent: -35,
             ease: 'none',
             scrollTrigger: {
-                trigger: '.liquid-marquee-container',
+                trigger: '.liquid-marquee-wrapper',
                 start: 'top bottom',
                 end: 'bottom top',
                 scrub: 0.6
