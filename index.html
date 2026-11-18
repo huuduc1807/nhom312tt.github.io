@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhóm 3 · 12TT | Chuyên Toán 2024 – 2027</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                    colors: {
+                        bg: '#f5f7ff',
+                        txt: '#0f0f14',
+                        sub: '#5e5e6e',
+                        blue: { DEFAULT: '#0066cc', light: '#3b8aed' },
+                        indigo: { DEFAULT: '#5e5ce6' },
+                        rose: { DEFAULT: '#ff2d55' },
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ═══════════════════════════════════════════════
+           ROOT & BASE
+        ═══════════════════════════════════════════════ */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        :root {
+            --glass-bg: rgba(255,255,255,0.55);
+            --glass-border: rgba(255,255,255,0.75);
+            --glass-shadow: rgba(80,100,160,0.13);
+            --txt: #0f0f14;
+            --sub: #5e5e6e;
+            --accent: #0066cc;
+            --accent2: #5e5ce6;
+            --accent3: #ff2d55;
+            --accent4: #af52de;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: #e8ecf8;
+            color: var(--txt);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ═══════════════════════════════════════════════
+           SCROLL PROGRESS BAR
+        ═══════════════════════════════════════════════ */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg,
+                #0066cc 0%, #5e5ce6 40%, #ff2d55 70%, #af52de 100%);
+            width: 0%;
+            z-index: 200;
+            pointer-events: none;
+            border-radius: 0 2px 2px 0;
+            box-shadow: 0 0 10px rgba(0,102,204,0.6);
+        }
+
+        /* ═══════════════════════════════════════════════
+           AURORA BACKGROUND
+        ═══════════════════════════════════════════════ */
+        .aurora-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .aurora-mesh {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 10% 15%, rgba(100,160,255,0.38) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 90% 20%, rgba(140,100,255,0.28) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 60% at 50% 85%, rgba(255,100,160,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 80% 50% at 20% 70%, rgba(60,180,255,0.22) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 70% at 80% 70%, rgba(180,100,255,0.18) 0%, transparent 55%);
+            animation: aurora-shift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes aurora-shift {
+            0%   { filter: hue-rotate(0deg) brightness(1); }
+            50%  { filter: hue-rotate(15deg) brightness(1.05); }
+            100% { filter: hue-rotate(-10deg) brightness(0.98); }
+        }
+
+        .aurora-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            will-change: transform;
+            mix-blend-mode: screen;
+        }
+
+        /* ═══════════════════════════════════════════════
+           AMBIENT CURSOR SPOTLIGHT & STARDUST CANVAS
+        ═══════════════════════════════════════════════ */
+        #cursor-glow-spotlight {
+            position: fixed;
+            top: 0; left: 0;
+            width: 540px; height: 540px;
+            margin-left: -270px; margin-top: -270px;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                rgba(0, 140, 255, 0.16) 0%,
+                rgba(120, 90, 255, 0.11) 35%,
+                rgba(255, 90, 160, 0.05) 60%,
+                transparent 72%
+            );
+            pointer-events: none;
+            z-index: 2;
+            filter: blur(52px);
+            will-change: transform;
+            opacity: 0.85;
+            transition: opacity 0.5s ease;
+        }
+
+        #cursor-fx-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 35;
+        }
+
+        /* ═══════════════════════════════════════════════
+           APPLE VISION PRO FLUID LENS CURSOR
+        ═══════════════════════════════════════════════ */
+        #cursor-dot {
+            position: fixed;
+            top: 0; left: 0;
+            width: 7px; height: 7px;
+            background: linear-gradient(135deg, #0066cc, #5e5ce6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(0, 102, 204, 0.65), 0 0 2px #fff;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            top: 0; left: 0;
+            width: 36px; height: 36px;
+            border: 1.5px solid rgba(0, 102, 204, 0.45);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                        height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                        background-color 0.35s ease,
+                        border-color 0.35s ease,
+                        box-shadow 0.35s ease;
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+
+        /* Thấu kính kính mờ khi di chuột vào phần tử tương tác */
+        body.cursor-active #cursor-ring {
+            width: 58px; height: 58px;
+            border-color: rgba(0, 102, 204, 0.8);
+            background: rgba(0, 102, 204, 0.08);
+            box-shadow: 0 0 25px rgba(94, 92, 230, 0.25), inset 0 0 12px rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px) saturate(150%);
+            -webkit-backdrop-filter: blur(4px) saturate(150%);
+        }
+
+        body.cursor-active #cursor-dot {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        /* ═══════════════════════════════════════════════
+           LIQUID GLASS CARD — Apple Vision Pro style
+        ═══════════════════════════════════════════════ */
+        .glass-card {
+            position: relative;
+            background: rgba(255,255,255,0.52);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.72);
+            box-shadow:
+                0 4px 6px rgba(0,0,0,0.04),
+                0 12px 40px rgba(80,100,180,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.9),
+                inset 0 -1px 0 rgba(0,0,0,0.04);
+            transition:
+                box-shadow 0.5s cubic-bezier(0.16,1,0.3,1),
+                transform 0.5s cubic-bezier(0.16,1,0.3,1),
+                border-color 0.4s ease;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        /* Inner glare layer */
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 28px;
+            background: radial-gradient(
+                ellipse 60% 50% at var(--mx, 50%) var(--my, 30%),
+                rgba(255,255,255,0.55) 0%,
+                transparent 70%
+            );
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            opacity: 0;
+        }
+
+        /* Border refraction */
+        .glass-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 28px;
+            padding: 1px;
+            background: radial-gradient(
+                300px circle at var(--mx, 50%) var(--my, 50%),
+                rgba(100,160,255,0.65),
+                rgba(160,100,255,0.3),
+                transparent 70%
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            box-shadow:
+                0 8px 10px rgba(0,0,0,0.05),
+                0 24px 60px rgba(80,100,180,0.14),
+                inset 0 1px 0 rgba(255,255,255,0.95),
+                inset 0 -1px 0 rgba(0,0,0,0.04);
+        }
+
+        .glass-card:hover::before,
+        .glass-card:hover::after {
+            opacity: 1;
+        }
+
+        /* ═══════════════════════════════════════════════
+           NAV — Liquid Glass Navbar
+        ═══════════════════════════════════════════════ */
+        .liquid-nav {
+            background: rgba(240,245,255,0.72);
+            backdrop-filter: blur(32px) saturate(200%);
+            -webkit-backdrop-filter: blur(32px) saturate(200%);
+            border-bottom: 1px solid rgba(255,255,255,0.65);
+            box-shadow:
+                0 1px 0 rgba(255,255,255,0.8) inset,
+                0 4px 24px rgba(80,100,180,0.08);
+        }
+
+        .nav-link {
+            position: relative;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--sub);
+            transition: color 0.25s ease;
+            padding: 4px 0;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 0; height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transition: width 0.35s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .nav-link:hover { color: var(--txt); }
+        .nav-link:hover::after { width: 100%; }
+
+        /* ═══════════════════════════════════════════════
+           HERO
+        ═══════════════════════════════════════════════ */
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.75);
+            box-shadow: 0 2px 16px rgba(80,100,180,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--sub);
+            letter-spacing: 0.03em;
+        }
+
+        .pulse-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #30d158;
+            box-shadow: 0 0 0 0 rgba(48,209,88,0.5);
+            animation: pulse-glow 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%   { box-shadow: 0 0 0 0 rgba(48,209,88,0.6); }
+            70%  { box-shadow: 0 0 0 10px rgba(48,209,88,0); }
+            100% { box-shadow: 0 0 0 0 rgba(48,209,88,0); }
+        }
+
+        /* Kinetic line reveal */
+        .line-mask {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: bottom;
+            padding-bottom: 0.08em;
+        }
+        .line-inner {
+            display: inline-block;
+            transform: translateY(115%);
+            will-change: transform;
+        }
+
+        /* Hero gradient title */
+        .hero-gradient {
+            background: linear-gradient(135deg,
+                #0f0f14 0%,
+                #1a3a8a 40%,
+                #5e5ce6 70%,
+                #0f0f14 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradient-flow 8s ease infinite;
+        }
+
+        @keyframes gradient-flow {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Hero CTA */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #0a1628 0%, #1a3a8a 100%);
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow:
+                0 4px 20px rgba(0,40,120,0.35),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+            transition:
+                transform 0.3s cubic-bezier(0.16,1,0.3,1),
+                box-shadow 0.3s ease;
+            will-change: transform;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.08) 100%);
+            border-radius: 999px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 32px rgba(0,40,120,0.45),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.75);
+            color: var(--txt);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow:
+                0 4px 20px rgba(80,100,180,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+            transition:
+                transform 0.3s cubic-bezier(0.16,1,0.3,1),
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
+            will-change: transform;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0,102,204,0.3);
+            box-shadow:
+                0 8px 32px rgba(80,100,180,0.18),
+                inset 0 1px 0 rgba(255,255,255,0.95);
+        }
+
+        /* ═══════════════════════════════════════════════
+           MARQUEE — Liquid Glass Text Strip
+        ═══════════════════════════════════════════════ */
+        .marquee-section {
+            position: relative;
+            overflow: hidden;
+            padding: 32px 0;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .marquee-section::before,
+        .marquee-section::after {
+            content: "";
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 180px;
+            z-index: 2;
+        }
+
+        .marquee-section::before {
+            left: 0;
+            background: linear-gradient(90deg, #e8ecf8 0%, transparent 100%);
+        }
+        .marquee-section::after {
+            right: 0;
+            background: linear-gradient(-90deg, #e8ecf8 0%, transparent 100%);
+        }
+
+        .marquee-track {
+            display: flex;
+            white-space: nowrap;
+            gap: 0;
+            will-change: transform;
+        }
+
+        .marquee-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 16px;
+        }
+
+        .marquee-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2rem, 4vw, 3.25rem);
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg,
+                #0066cc 0%, #5e5ce6 30%, #ff2d55 65%, #af52de 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 4px 20px rgba(0,102,204,0.2));
+        }
+
+        .marquee-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ═══════════════════════════════════════════════
+           SECTION LABEL
+        ═══════════════════════════════════════════════ */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            padding: 5px 14px;
+            background: rgba(0,102,204,0.08);
+            border-radius: 999px;
+            border: 1px solid rgba(0,102,204,0.15);
+        }
+
+        /* ═══════════════════════════════════════════════
+           GROUP PHOTO — Cinematic showcase
+        ═══════════════════════════════════════════════ */
+        .showcase-frame {
+            position: relative;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow:
+                0 32px 80px rgba(0,0,0,0.12),
+                0 8px 24px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.4);
+            transform-origin: center center;
+            will-change: transform;
+        }
+
+        .showcase-frame::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0,0,0,0.3) 100%
+            );
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .showcase-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            will-change: transform;
+            transform: scale(1.08);
+        }
+
+        /* ═══════════════════════════════════════════════
+           MEMBER CARDS
+        ═══════════════════════════════════════════════ */
+        .member-card {
+            position: relative;
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.72);
+            box-shadow:
+                0 4px 24px rgba(80,100,180,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+            padding: 28px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition:
+                box-shadow 0.5s cubic-bezier(0.16,1,0.3,1),
+                border-color 0.4s ease;
+            will-change: transform;
+        }
+
+        .member-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 28px;
+            background: radial-gradient(
+                ellipse 70% 50% at var(--mx, 50%) var(--my, 30%),
+                rgba(255,255,255,0.5) 0%,
+                transparent 70%
+            );
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .member-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 28px;
+            padding: 1px;
+            background: radial-gradient(
+                250px circle at var(--mx, 50%) var(--my, 50%),
+                rgba(100,160,255,0.6),
+                transparent 70%
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+
+        .member-card:hover::before,
+        .member-card:hover::after { opacity: 1; }
+
+        .member-card:hover {
+            box-shadow:
+                0 20px 60px rgba(80,100,180,0.18),
+                inset 0 1px 0 rgba(255,255,255,0.95);
+        }
+
+        .member-avatar {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow:
+                0 4px 20px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+            margin-bottom: 18px;
+            flex-shrink: 0;
+        }
+
+        .member-avatar img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .member-card:hover .member-avatar img {
+            transform: scale(1.12);
+        }
+
+        .member-name {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--txt);
+            transition: color 0.3s ease;
+            line-height: 1.3;
+        }
+
+        .member-card:hover .member-name {
+            color: var(--accent);
+        }
+
+        .member-quote {
+            font-size: 0.775rem;
+            color: var(--sub);
+            font-style: italic;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .member-cta {
+            font-size: 0.775rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 16px;
+            opacity: 0;
+            transform: translateY(6px);
+            transition:
+                opacity 0.3s ease,
+                transform 0.3s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .member-card:hover .member-cta {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ═══════════════════════════════════════════════
+           STATS STRIP
+        ═══════════════════════════════════════════════ */
+        .stat-pill {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 20px 32px;
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.72);
+            box-shadow: 0 4px 20px rgba(80,100,180,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+            flex: 1;
+        }
+
+        .stat-number {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 900;
+            font-size: 2rem;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--sub);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* ═══════════════════════════════════════════════
+           EXERCISE / LESSON SECTION — GIỮ NGUYÊN CẤU TRÚC
+        ═══════════════════════════════════════════════ */
+        .lesson-box {
+            background: rgba(255,255,255,0.58);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.72);
+            box-shadow:
+                0 4px 20px rgba(80,100,180,0.07),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+            margin-bottom: 16px;
+            transition:
+                box-shadow 0.4s ease,
+                border-color 0.4s ease;
+            overflow: hidden;
+        }
+
+        .lesson-box:hover {
+            border-color: rgba(0,102,204,0.3);
+            box-shadow:
+                0 12px 40px rgba(80,100,180,0.12),
+                inset 0 1px 0 rgba(255,255,255,0.95);
+        }
+
+        .lesson-title {
+            padding: 22px 28px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--txt);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            transition: background-color 0.25s ease;
+        }
+
+        .lesson-title:hover {
+            background: rgba(0,102,204,0.03);
+        }
+
+        .lesson-title::-webkit-details-marker { display: none; }
+
+        .chevron-wrap {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: rgba(0,102,204,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            transition:
+                transform 0.45s cubic-bezier(0.16,1,0.3,1),
+                background-color 0.3s ease,
+                color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        details[open] .chevron-wrap {
+            transform: rotate(180deg);
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .lesson-num-badge {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        /* ─── BÀI TẬP GRID ─── */
+        .lesson-content {
+            padding: 8px 24px 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        /* ─── EXERCISE ITEM CARD ─── */
+        .exercise-item {
+            background: rgba(248,249,255,0.85);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 14px;
+            border: 1px solid rgba(220,225,245,0.7);
+            box-shadow: 0 2px 10px rgba(80,100,180,0.05);
+            transition:
+                transform 0.4s cubic-bezier(0.16,1,0.3,1),
+                background 0.3s ease,
+                box-shadow 0.4s ease,
+                border-color 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            transform: translateY(-6px);
+            background: rgba(255,255,255,0.95);
+            border-color: rgba(0,102,204,0.2);
+            box-shadow:
+                0 20px 40px rgba(80,100,180,0.1),
+                0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        .exercise-thumb-wrap {
+            width: 100%;
+            aspect-ratio: 16/10;
+            border-radius: 14px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #dde2f5 0%, #e8ecff 100%);
+            flex-shrink: 0;
+        }
+
+        .exercise-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .exercise-item:hover img { transform: scale(1.08); }
+
+        .exercise-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 11px 16px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #0a1628 0%, #1a3a8a 100%);
+            color: #fff;
+            font-size: 0.84rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 16px rgba(0,40,120,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition:
+                background 0.25s ease,
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .exercise-btn:hover {
+            background: linear-gradient(135deg, #0066cc 0%, #5e5ce6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,102,204,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+        }
+
+        /* ═══════════════════════════════════════════════
+           FOOTER
+        ═══════════════════════════════════════════════ */
+        .glass-footer {
+            background: rgba(240,245,255,0.72);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border-top: 1px solid rgba(255,255,255,0.65);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        /* ═══════════════════════════════════════════════
+           FLOATING PARTICLES
+        ═══════════════════════════════════════════════ */
+        .particle-field {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%,
+                rgba(255,255,255,0.9),
+                rgba(100,160,255,0.3) 40%,
+                transparent 70%);
+            animation: float-particle linear infinite;
+            will-change: transform, opacity;
+        }
+
+        @keyframes float-particle {
+            0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10%  { opacity: 1; }
+            90%  { opacity: 0.6; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
+        /* ═══════════════════════════════════════════════
+           SCROLL-REVEAL BASE STATES
+        ═══════════════════════════════════════════════ */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        /* ═══════════════════════════════════════════════
+           DECORATIVE GRID BACKGROUND
+        ═══════════════════════════════════════════════ */
+        .dot-grid {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            background-image:
+                radial-gradient(circle, rgba(100,130,200,0.12) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: radial-gradient(ellipse 100% 100% at 50% 50%,
+                black 20%, transparent 80%);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(100,130,200,0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,102,204,0.5);
+        }
+
+        ::selection {
+            background: rgba(0,102,204,0.2);
+            color: #0f0f14;
+        }
+
+        /* ═══════════════════════════════════════════════
+           MAGNETIC BUTTON WRAPPER
+        ═══════════════════════════════════════════════ */
+        .magnetic { will-change: transform; }
+
+        /* ═══════════════════════════════════════════════
+           DECORATIVE LABEL TAG
+        ═══════════════════════════════════════════════ */
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BACKGROUND SYSTEM
+══════════════════════════════════════════════════════════════ -->
+
+<!-- Aurora gradient mesh -->
+<div class="aurora-bg">
+    <div class="aurora-mesh"></div>
+    <div class="aurora-orb" id="orb-a" style="width:600px;height:600px;background:radial-gradient(circle,rgba(100,160,255,0.45),transparent 70%);top:-100px;left:-80px;opacity:0.7;"></div>
+    <div class="aurora-orb" id="orb-b" style="width:520px;height:520px;background:radial-gradient(circle,rgba(160,100,255,0.35),transparent 70%);top:30%;right:-100px;opacity:0.6;"></div>
+    <div class="aurora-orb" id="orb-c" style="width:580px;height:580px;background:radial-gradient(circle,rgba(255,100,160,0.25),transparent 70%);bottom:-80px;left:20%;opacity:0.5;"></div>
+    <div class="aurora-orb" id="orb-d" style="width:400px;height:400px;background:radial-gradient(circle,rgba(60,220,180,0.2),transparent 70%);top:60%;left:60%;opacity:0.4;"></div>
+</div>
+
+<!-- Dot grid texture -->
+<div class="dot-grid"></div>
+
+<!-- Floating particles -->
+<div class="particle-field" id="particle-field"></div>
+
+<!-- Ambient cursor spotlight aura -->
+<div id="cursor-glow-spotlight"></div>
+
+<!-- Cursor stardust / crystal particle trail canvas -->
+<canvas id="cursor-fx-canvas"></canvas>
+
+<!-- Scroll progress -->
+<div id="scroll-progress"></div>
+
+<!-- Custom cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     NAV
+══════════════════════════════════════════════════════════════ -->
+<nav class="liquid-nav fixed top-0 inset-x-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-3 group magnetic">
+            <!-- ĐẶT ẢNH: nhom3.jpg — logo nhóm, hình tròn, ~ 72x72px -->
+            <img src="nhom3.jpg"
+                 alt="Logo Nhóm 3"
+                 onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80'"
+                 class="w-9 h-9 rounded-full object-cover border-2 border-white/70 shadow-md transition-transform duration-500 group-hover:scale-110">
+            <div class="flex flex-col leading-none">
+                <span class="font-display font-bold text-sm tracking-tight" style="color:var(--txt)">Nhóm 3 · 12TT</span>
+                <span class="text-[10px] font-medium mt-0.5" style="color:var(--sub)">Chuyên Toán 2024 – 2027</span>
+            </div>
+        </a>
+
+        <div class="hidden sm:flex items-center gap-8">
+            <a href="#nhom-chung-minh" class="nav-link">Nhóm Chúng Mình</a>
+            <a href="#thanh-vien" class="nav-link">Thành Viên</a>
+            <a href="#bai-tap" class="nav-link">Bài Tập</a>
+            <a href="#bai-tap" class="btn-primary py-2.5 px-5 text-sm magnetic">
+                Vào kho bài
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════════════════════════ -->
+<main class="relative z-10 pt-24 pb-20">
+
+    <!-- ─────────────────────────────────────────
+         1. HERO
+    ───────────────────────────────────────── -->
+    <section class="max-w-5xl mx-auto px-6 pt-12 pb-16 text-center">
+
+        <div class="hero-badge mb-8 opacity-0 translate-y-4" id="hero-badge">
+            <span class="pulse-dot"></span>
+            <span>Lớp Chuyên Toán 2024 – 2027 · THPT Chuyên Bến Tre</span>
+        </div>
+
+        <h1 class="font-display font-black tracking-tighter leading-[1.03] mb-6"
+            style="font-size: clamp(3.5rem, 10vw, 6.5rem)">
+            <span class="line-mask">
+                <span class="line-inner" style="color:var(--txt)">Nhóm 3.</span>
+            </span>
+            <br>
+            <span class="line-mask">
+                <span class="line-inner hero-gradient">Góc nhỏ của 12TT.</span>
+            </span>
+        </h1>
+
+        <p class="hero-sub max-w-xl mx-auto leading-relaxed mb-10 opacity-0 translate-y-5"
+           style="font-size:1.125rem; color:var(--sub)">
+            <em style="font-style:normal;font-weight:500;color:var(--txt)">"nhóm này là cái nhóm"</em>
+            &nbsp;— Không gian lưu giữ những khoảnh khắc đồng hành
+            và hệ thống bài thực hành Tin học của năm thành viên.
+        </p>
+
+        <div class="hero-cta flex flex-wrap items-center justify-center gap-4 opacity-0 translate-y-5">
+            <a href="#bai-tap" class="btn-primary magnetic">
+                Khám phá kho bài tập
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="#thanh-vien" class="btn-secondary magnetic">
+                Gặp gỡ thành viên
+            </a>
+        </div>
+    </section>
+
+    <!-- STATS STRIP -->
+    <div class="max-w-3xl mx-auto px-6 mb-6">
+        <div class="flex gap-3 flex-wrap justify-center reveal-up" id="stats-strip">
+            <div class="stat-pill">
+                <span class="stat-number">5</span>
+                <span class="stat-label">Thành Viên</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-number">3</span>
+                <span class="stat-label">Bài Học</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-number">9+</span>
+                <span class="stat-label">Bài Tập</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-number">∞</span>
+                <span class="stat-label">Kỷ Niệm</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         MARQUEE — Liquid Glass Text
+    ───────────────────────────────────────── -->
+    <div class="marquee-section my-4">
+        <div class="marquee-track" id="marquee-track">
+            <!-- duplicated for seamless loop -->
+            <div class="marquee-item">
+                <span class="marquee-text">NHÓM 3 · LỚP 12TT</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#ff2d55,#af52de)"></span>
+                <span class="marquee-text">BẢO NAM</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#0066cc,#5e5ce6)"></span>
+                <span class="marquee-text">HỮU ĐỨC</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#5e5ce6,#af52de)"></span>
+                <span class="marquee-text">THANH NHƯ</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#af52de,#ff2d55)"></span>
+                <span class="marquee-text">GIA HÂN</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#30d158,#0066cc)"></span>
+                <span class="marquee-text">ÁI MY</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#ff9f0a,#ff2d55)"></span>
+                <span class="marquee-text">CHUYÊN TOÁN 2024–2027</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#0066cc,#30d158)"></span>
+                <span class="marquee-text">THPT CHUYÊN BẾN TRE</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#5e5ce6,#ff2d55)"></span>
+            </div>
+            <div class="marquee-item" aria-hidden="true">
+                <span class="marquee-text">NHÓM 3 · LỚP 12TT</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#ff2d55,#af52de)"></span>
+                <span class="marquee-text">BẢO NAM</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#0066cc,#5e5ce6)"></span>
+                <span class="marquee-text">HỮU ĐỨC</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#5e5ce6,#af52de)"></span>
+                <span class="marquee-text">THANH NHƯ</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#af52de,#ff2d55)"></span>
+                <span class="marquee-text">GIA HÂN</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#30d158,#0066cc)"></span>
+                <span class="marquee-text">ÁI MY</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#ff9f0a,#ff2d55)"></span>
+                <span class="marquee-text">CHUYÊN TOÁN 2024–2027</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#0066cc,#30d158)"></span>
+                <span class="marquee-text">THPT CHUYÊN BẾN TRE</span>
+                <span class="marquee-dot" style="background:linear-gradient(135deg,#5e5ce6,#ff2d55)"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         2. NHÓM CHÚNG MÌNH
+    ───────────────────────────────────────── -->
+    <section id="nhom-chung-minh" class="max-w-4xl mx-auto px-6 py-20">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-5 reveal-up">
+            <div>
+                <span class="section-label mb-4 inline-flex">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+                    Tập thể
+                </span>
+                <h2 class="font-display font-black tracking-tight mt-3"
+                    style="font-size:clamp(2rem,5vw,3rem);color:var(--txt)">
+                    Nhóm Chúng Mình
+                </h2>
+            </div>
+            <p class="text-sm max-w-xs" style="color:var(--sub)">
+                Năm mảnh ghép cùng học tập và ghi dấu tại Chuyên Toán 2024 – 2027.
+            </p>
+        </div>
+
+        <div class="showcase-frame bg-gray-200 aspect-[16/9] max-h-[420px] w-full relative reveal-up">
+            <!-- ĐẶT ẢNH: nhom.jpg — ảnh cả nhóm, ~ 1200x675px trở lên -->
+            <img src="nhom.jpg"
+                 alt="Nhóm Chúng Mình – Nhóm 3 12TT"
+                 onerror="this.src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=85'"
+                 class="showcase-img w-full h-full object-cover">
+            <!-- Caption overlay -->
+            <div style="position:absolute;bottom:0;left:0;right:0;z-index:3;padding:24px 28px;">
+                <span style="display:inline-block;padding:6px 16px;border-radius:999px;background:rgba(255,255,255,0.18);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.3);font-size:0.78rem;font-weight:600;color:#fff;letter-spacing:0.04em;">
+                    📸 Nhóm 3 · 12TT · Chuyên Toán 2024 – 2027
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────
+         3. THÀNH VIÊN
+    ───────────────────────────────────────── -->
+    <section id="thanh-vien" class="max-w-6xl mx-auto px-6 py-16">
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal-up">
+            <span class="section-label mb-4 inline-flex">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Đội hình
+            </span>
+            <h2 class="font-display font-black tracking-tight mt-3 mb-4"
+                style="font-size:clamp(2.2rem,5vw,3.5rem);color:var(--txt)">
+                Năm thành viên.
+            </h2>
+            <p style="color:var(--sub);font-size:1rem">
+                Chọn vào từng thành viên để ghé thăm góc cá nhân riêng biệt.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5" id="members-grid">
+
+            <!-- Thành viên 1: Nguyễn Bảo Nam -->
+            <!-- ĐẶT ẢNH: nam.jpg — ảnh chân dung Bảo Nam, ~ 300x300px -->
+            <a href="trangnam.html" class="member-card tilt-card">
+                <div class="member-avatar">
+                    <img src="nam.jpg" alt="Nguyễn Bảo Nam"
+                         onerror="this.src='https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80'">
+                </div>
+                <h3 class="member-name">Nguyễn Bảo Nam</h3>
+                <p class="member-quote">"An Thư dễ thương"</p>
+                <span class="member-cta">Xem trang cá nhân →</span>
+            </a>
+
+            <!-- Thành viên 2: Nguyễn Hữu Đức -->
+            <!-- ĐẶT ẢNH: duc.jpg — ảnh chân dung Hữu Đức, ~ 300x300px -->
+            <a href="trangduc.html" class="member-card tilt-card">
+                <div class="member-avatar">
+                    <img src="duc.jpg" alt="Nguyễn Hữu Đức"
+                         onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80'">
+                </div>
+                <h3 class="member-name">Nguyễn Hữu Đức</h3>
+                <p class="member-quote">"con bò chắc chắn biết bay"</p>
+                <span class="member-cta">Xem trang cá nhân →</span>
+            </a>
+
+            <!-- Thành viên 3: Mai Thanh Như -->
+            <!-- ĐẶT ẢNH: nhu.jpg — ảnh chân dung Thanh Như, ~ 300x300px -->
+            <a href="trangnhu.html" class="member-card tilt-card">
+                <div class="member-avatar">
+                    <img src="nhu.jpg" alt="Mai Thanh Như"
+                         onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80'">
+                </div>
+                <h3 class="member-name">Mai Thanh Như</h3>
+                <p class="member-quote">"Hóa đủ rồi"</p>
+                <span class="member-cta">Xem trang cá nhân →</span>
+            </a>
+
+            <!-- Thành viên 4: Nguyễn Hoàng Gia Hân -->
+            <!-- ĐẶT ẢNH: han.jpg — ảnh chân dung Gia Hân, ~ 300x300px -->
+            <a href="tranghan.html" class="member-card tilt-card">
+                <div class="member-avatar">
+                    <img src="han.jpg" alt="Nguyễn Hoàng Gia Hân"
+                         onerror="this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=300&q=80'">
+                </div>
+                <h3 class="member-name">Nguyễn Hoàng Gia Hân</h3>
+                <p class="member-quote">"gái đầu hói chỉ nói yêu anh"</p>
+                <span class="member-cta">Xem trang cá nhân →</span>
+            </a>
+
+            <!-- Thành viên 5: Huỳnh Dương Ái My -->
+            <!-- ĐẶT ẢNH: my.jpg — ảnh chân dung Ái My, ~ 300x300px -->
+            <a href="trangmy.html" class="member-card tilt-card">
+                <div class="member-avatar">
+                    <img src="my.jpg" alt="Huỳnh Dương Ái My"
+                         onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80'">
+                </div>
+                <h3 class="member-name">Huỳnh Dương Ái My</h3>
+                <p class="member-quote">"chạy theo con chó tưởng đó là anh"</p>
+                <span class="member-cta">Xem trang cá nhân →</span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────
+         4. KHO BÀI TẬP
+    ───────────────────────────────────────── -->
+    <section id="bai-tap" class="max-w-5xl mx-auto px-6 py-16">
+        <div class="mb-12 reveal-up">
+            <span class="section-label mb-4 inline-flex">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                Lưu trữ học tập
+            </span>
+            <h2 class="font-display font-black tracking-tight mt-3 mb-3"
+                style="font-size:clamp(2.2rem,5vw,3.5rem);color:var(--txt)">
+                Danh sách bài tập.
+            </h2>
+            <p style="color:var(--sub);font-size:1rem">
+                Bấm vào từng chương bài học để mở các bài luyện tập và vận dụng.
+            </p>
+        </div>
+
+        <!-- =====================================================================
+             HƯỚNG DẪN THÊM BÀI MỚI:
+             Copy nguyên khối <details>...</details> một bài sẵn có,
+             dán xuống dưới dòng "DÁN BÀI MỚI...", rồi sửa lại:
+               · Số bài trong .lesson-num-badge và tiêu đề <span>Bài XX</span>
+               · Màu badge: thay bg-blue-50 / text-blue-600 cho phù hợp
+               · Các src="" ảnh và href="" link cho từng exercise-item
+        ===================================================================== -->
+
+        <!-- BÀI 10 -->
+        <details class="lesson-box lesson-reveal" open>
+            <summary class="lesson-title">
+                <div class="flex items-center gap-4">
+                    <span class="lesson-num-badge bg-blue-50 text-blue-600">10</span>
+                    <span>Bài 10</span>
+                </div>
+                <span class="chevron-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+            </summary>
+
+            <div class="lesson-content">
+                <!-- Cục 1 -->
+                <div class="exercise-item">
+                    <div>
+                        <div class="exercise-thumb-wrap mb-3">
+                            <!-- ĐẶT ẢNH: lt1bai10.jpg -->
+                            <img src="lt1bai10.jpg" alt="Luyện Tập 1 Bài 10"
+                                 onerror="this.src='https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=500&q=80'">
+                        </div>
+                        <span class="tag-pill bg-blue-50 text-blue-600 mb-1">Bài 10</span>
+                        <h3 class="font-display font-bold text-base mt-1" style="color:var(--txt)">Luyện tập 1</h3>
+                    </div>
+                    <a href="lt1bai10.html" class="exercise-btn">
+                        Xem bài tập
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Cục 2 -->
+                <div class="exercise-item">
+                    <div>
+                        <div class="exercise-thumb-wrap mb-3">
+                            <!-- ĐẶT ẢNH: lt2bai10.jpg -->
+                            <img src="lt2bai10.jpg" alt="Luyện Tập 2 Bài 10"
+                                 onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=80'">
+                        </div>
+                        <span class="tag-pill bg-emerald-50 text-emerald-600 mb-1">Bài 10</span>
+                        <h3 class="font-display font-bold text-base mt-1" style="color:var(--txt)">Luyện Tập 2</h3>
+                    </div>
+                    <a href="lt2bai10.html" class="exercise-btn">
+                        Xem bài tập
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Cục 3 -->
+                <div class="exercise-item">
+                    <div>
+                        <div class="exercise-thumb-wrap mb-3">
+                            <!-- ĐẶT ẢNH: vd2bai10.jpg -->
+                            <img src="vd2bai10.jpg" alt="Vận dụng 2 bài 10"
+                                 onerror="this.src='https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=500&q=80'">
+                        </div>
+                        <span class="tag-pill bg-amber-50 text-amber-600 mb-1">Bài 10</span>
+                        <h3 class="font-display font-bold text-base mt-1" style="color:var(--txt)">Vận Dụng 2</h3>
+                    </div>
+                    <a href="vd2bai10.html" class="exercise-btn">
+                        Xem bài tập
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+        </details>
+
+        <!-- BÀI 11 -->
+        <details class="lesson-box lesson-reveal">
+            <summary class="lesson-title">
+                <div class="flex items-center gap-4">
+                    <span class="lesson-num-badge bg-indigo-50 text-indigo-600">11</span>
+                    <span>Bài 11</span>
+                </div>
+                <span class="chevron-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+            </summary>
+
+            <div class="lesson-content">
+                <!-- Cục 1: Ghi chú lý thuyết -->
+                <div class="exercise-item" style="background:rgba(255,249,235,0.85);border-color:rgba(245,180,0,0.2);">
+                    <div>
+                        <span class="tag-pill bg-amber-100 text-amber-700 mb-3 inline-flex">Ghi chú</span>
+                        <h3 class="font-display font-bold text-base" style="color:var(--txt)">TRẢ LỜI LUYỆN TẬP 1 BÀI 11</h3>
+                        <p class="text-sm mt-2" style="color:var(--sub)">Ảnh có kích thước 375px</p>
+                    </div>
+                </div>
+
+                <!-- Cục 2: Luyện tập 2 (2 ảnh) -->
+                <div class="exercise-item">
+                    <div>
+                        <div class="grid grid-cols-2 gap-2 mb-3">
+                            <div class="exercise-thumb-wrap">
+                                <!-- ĐẶT ẢNH: lt2bai11(1).jpg -->
+                                <img src="lt2bai11(1).jpg" alt="LT2 Bài 11 (1)"
+                                     onerror="this.src='https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=300&q=80'">
+                            </div>
+                            <div class="exercise-thumb-wrap">
+                                <!-- ĐẶT ẢNH: lt2bai11(2).jpg -->
+                                <img src="lt2bai11(2).jpg" alt="LT2 Bài 11 (2)"
+                                     onerror="this.src='https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=300&q=80'">
+                            </div>
+                        </div>
+                        <span class="tag-pill bg-blue-50 text-blue-600 mb-1">Bài 11</span>
+                        <h3 class="font-display font-bold text-base mt-1" style="color:var(--txt)">Luyện tập 2</h3>
+                    </div>
+                    <a href="lt2bai11.html" class="exercise-btn">
+                        Xem bài tập
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Cục 3: Vận dụng -->
+                <div class="exercise-item">
+                    <div>
+                        <div class="exercise-thumb-wrap mb-3">
+                            <!-- ĐẶT ẢNH: vdbai11.jpg -->
+                            <img src="vdbai11.jpg" alt="Vận Dụng Bài 11"
+                                 onerror="this.src='https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=500&q=80'">
+                        </div>
+                        <span class="tag-pill bg-emerald-50 text-emerald-600 mb-1">Bài 11</span>
+                        <h3 class="font-display font-bold text-base mt-1" style="color:var(--txt)">Vận Dụng</h3>
+                    </div>
+                    <a href="vdbai11.html" class="exercise-btn">
+                        Xem bài tập
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+        </details>
+
+        <!-- BÀI 12 -->
+        <details class="lesson-box lesson-reveal">
+            <summary class="lesson-title">
+                <div class="flex items-center gap-4">
+                    <span class="lesson-num-badge bg-emerald-50 text-emerald-600">12</span>
+                    <span>Bài 12</span>
+                </div>
+                <span class="chevron-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+            </summary>
+
+            <div class="lesson-content">
+                <!-- Cục 1 -->
+                <div class="exercise-item">
+                    <div>
+                        <div class="exercise-thumb-wrap mb-3">
+                            <!-- ĐẶT ẢNH: lt1bai12.jpg -->
+                            <img src="lt1bai12.jpg" alt="Luyện tập Bài 12"
+                                 onerror="this.src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=500&q=80'">
+                        </div>
+                        <span class="tag-pill bg-amber-50 text-amber-600 mb-1">Bài 12</span>
+                        <h3 class="font-display font-bold text-base mt-1" style="color:var(--txt)">Luyện Tập</h3>
+                    </div>
+                    <a href="lt1bai12.html" class="exercise-btn">
+                        Xem bài tập
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Cục 2 -->
+                <div class="exercise-item">
+                    <div>
+                        <div class="exercise-thumb-wrap mb-3">
+                            <!-- ĐẶT ẢNH: vd1bai12.jpg -->
+                            <img src="vd1bai12.jpg" alt="Vận dụng 1 Bài 12"
+                                 onerror="this.src='https://images.unsplash.com/photo-1550439062-609e1531270e?auto=format&fit=crop&w=500&q=80'">
+                        </div>
+                        <span class="tag-pill bg-blue-50 text-blue-600 mb-1">Bài 12</span>
+                        <h3 class="font-display font-bold text-base mt-1" style="color:var(--txt)">Vận Dụng 1</h3>
+                    </div>
+                    <a href="vd1bai12.html" class="exercise-btn">
+                        Xem bài tập
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Cục 3 -->
+                <div class="exercise-item">
+                    <div>
+                        <div class="exercise-thumb-wrap mb-3">
+                            <!-- ĐẶT ẢNH: vd2bai12.jpg -->
+                            <img src="vd2bai12.jpg" alt="Vận Dụng 2 Bài 12"
+                                 onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80'">
+                        </div>
+                        <span class="tag-pill bg-emerald-50 text-emerald-600 mb-1">Bài 12</span>
+                        <h3 class="font-display font-bold text-base mt-1" style="color:var(--txt)">Vận Dụng 2</h3>
+                    </div>
+                    <a href="vd2bai12.html" class="exercise-btn">
+                        Xem bài tập
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+        </details>
+
+        <!-- =====================================================================
+             DÁN BÀI MỚI (BÀI 13, BÀI 14...) NGAY BÊN DƯỚI DÒNG NÀY
+        ===================================================================== -->
+
+    </section>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════ -->
+<footer class="glass-footer relative z-10 py-10">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <!-- ĐẶT ẢNH: nhom3.jpg (tái dùng) -->
+                <img src="nhom3.jpg" alt="Logo"
+                     onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=60&q=80'"
+                     class="w-8 h-8 rounded-full object-cover border border-white/60">
+                <div>
+                    <p class="font-display font-bold text-sm" style="color:var(--txt)">Nhóm 3 · Lớp 12TT</p>
+                    <p class="text-xs mt-0.5" style="color:var(--sub)">Chuyên Toán 2024 – 2027</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6 text-xs" style="color:var(--sub)">
+                <a href="#nhom-chung-minh" class="hover:text-blue-600 transition-colors font-medium">Nhóm Chúng Mình</a>
+                <a href="#thanh-vien" class="hover:text-blue-600 transition-colors font-medium">Thành Viên</a>
+                <a href="#bai-tap" class="hover:text-blue-600 transition-colors font-medium">Bài Tập</a>
+            </div>
+
+            <p class="text-xs" style="color:var(--sub)">THPT Chuyên Bến Tre</p>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-black/5 text-center text-xs" style="color:var(--sub)">
+            Made with ✨ by Nhóm 3 · 12TT
+        </div>
+    </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════════
+     JAVASCRIPT — WATER PHYSICS + GSAP + ALL INTERACTIONS
+══════════════════════════════════════════════════════════════ -->
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   1. VISION PRO INTERACTIVE LENS & AMBIENT DYNAMIC BACKGROUND SYSTEM
+      - Di chuột mượt mà thấu kính kính mờ (Liquid Glass Lens Cursor)
+      - Nền cực quang & hào quang spotlight tương tác động theo chuột
+      - Vệt bụi sao tinh thể phát quang (Ethereal Stardust Trail)
+      - Hiệu ứng click nở hoa ánh sáng ma mị (Celestial Bloom)
+═══════════════════════════════════════════════════════════════════ */
+(function initInteractiveCosmicSystem() {
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    const spotlight = document.getElementById('cursor-glow-spotlight');
+    const canvas = document.getElementById('cursor-fx-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize, { passive: true });
+
+    // Tọa độ chuột thực & tọa độ mượt mà (Spring Physics)
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let prevMouseX = mouseX;
+    let prevMouseY = mouseY;
+    let ringX = mouseX;
+    let ringY = mouseY;
+    let spotX = mouseX;
+    let spotY = mouseY;
+    let mouseSpeed = 0;
+    let isHoveringInteractive = false;
+    let isMouseDown = false;
+
+    // Hạt tinh thể phát quang (Stardust Trail)
+    const sparkles = [];
+    const lightRipples = [];
+
+    // Bảng màu tinh thể lỏng cực quang (Ethereal Palette)
+    const colorPalette = [
+        { r: 0,   g: 210, b: 255 }, // Electric Cyan
+        { r: 94,  g: 92,  b: 230 }, // Deep Indigo
+        { r: 175, g: 82,  b: 222 }, // Neon Violet
+        { r: 255, g: 45,  b: 85  }, // Vivid Rose
+        { r: 255, g: 255, b: 255 }  // Diamond Sparkle
+    ];
+
+    // Tạo hạt bụi sao tinh thể
+    function spawnSparkle(x, y, vx, vy, isBurst = false) {
+        const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+        sparkles.push({
+            x: x,
+            y: y,
+            vx: vx + (Math.random() - 0.5) * (isBurst ? 4.5 : 1.2),
+            vy: vy + (Math.random() - 0.5) * (isBurst ? 4.5 : 1.2),
+            size: isBurst ? Math.random() * 3.8 + 2.0 : Math.random() * 2.8 + 1.2,
+            alpha: isBurst ? 1.0 : 0.85,
+            decay: isBurst ? Math.random() * 0.022 + 0.015 : Math.random() * 0.018 + 0.012,
+            color: color,
+            rotation: Math.random() * Math.PI,
+            spinSpeed: (Math.random() - 0.5) * 0.08,
+            sparklePhase: Math.random() * Math.PI * 2
+        });
+    }
+
+    // Tạo sóng ánh sáng lan tỏa nhẹ khi click
+    function spawnLightRipple(x, y) {
+        lightRipples.push({
+            x: x,
+            y: y,
+            radius: 4,
+            maxRadius: 160,
+            alpha: 0.75,
+            speed: 4.8
+        });
+    }
+
+    // Lắng nghe di chuột
+    window.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        // Tính tốc độ di chuột
+        const dx = mouseX - prevMouseX;
+        const dy = mouseY - prevMouseY;
+        mouseSpeed = Math.hypot(dx, dy);
+
+        // Sinh hạt bụi sao mượt mà theo chuyển động
+        const spawnCount = Math.min(Math.floor(mouseSpeed / 7) + 1, 4);
+        for (let i = 0; i < spawnCount; i++) {
+            const lerpFactor = i / spawnCount;
+            const px = prevMouseX + dx * lerpFactor;
+            const py = prevMouseY + dy * lerpFactor;
+            spawnSparkle(px, py, -dx * 0.08, -dy * 0.08);
+        }
+
+        prevMouseX = mouseX;
+        prevMouseY = mouseY;
+
+        // Tương tác nền: di chuyển cực quang 3D Parallax theo chuột
+        const normX = mouseX / width;
+        const normY = mouseY / height;
+        if (window.gsap) {
+            gsap.to('#orb-a', { x: (normX - 0.5) * 70,  y: (normY - 0.5) * 50,  duration: 1.6, ease: 'power2.out', overwrite: 'auto' });
+            gsap.to('#orb-b', { x: -(normX - 0.5) * 85, y: -(normY - 0.5) * 65, duration: 1.8, ease: 'power2.out', overwrite: 'auto' });
+            gsap.to('#orb-c', { x: (normX - 0.5) * 60,  y: -(normY - 0.5) * 45, duration: 1.7, ease: 'power2.out', overwrite: 'auto' });
+            gsap.to('#orb-d', { x: -(normX - 0.5) * 65, y: (normY - 0.5) * 55,  duration: 1.5, ease: 'power2.out', overwrite: 'auto' });
+        }
+    }, { passive: true });
+
+    // Khi click chuột: bung nở chùm hoa sao pha lê
+    window.addEventListener('mousedown', e => {
+        isMouseDown = true;
+        spawnLightRipple(e.clientX, e.clientY);
+        for (let i = 0; i < 22; i++) {
+            const angle = (Math.PI * 2 * i) / 22 + (Math.random() - 0.5) * 0.3;
+            const speed = Math.random() * 5.0 + 2.0;
+            spawnSparkle(e.clientX, e.clientY, Math.cos(angle) * speed, Math.sin(angle) * speed, true);
+        }
+        if (ring) {
+            ring.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%) scale(0.8)`;
+        }
+    });
+
+    window.addEventListener('mouseup', () => {
+        isMouseDown = false;
+        if (ring) {
+            ring.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%) scale(1)`;
+        }
+    });
+
+    // Hỗ trợ cảm ứng trên thiết bị di động
+    window.addEventListener('touchmove', e => {
+        if (e.touches && e.touches[0]) {
+            const t = e.touches[0];
+            mouseX = t.clientX;
+            mouseY = t.clientY;
+            spawnSparkle(t.clientX, t.clientY, 0, 0);
+        }
+    }, { passive: true });
+
+    // Tương tác kính mờ: khi rê chuột vào link, nút, thẻ card
+    const interactiveQuery = 'a, button, summary, details, .tilt-card, .apple-card, .exercise-item, .stat-pill, .member-card, input';
+    document.querySelectorAll(interactiveQuery).forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            isHoveringInteractive = true;
+            document.body.classList.add('cursor-active');
+        });
+        el.addEventListener('mouseleave', () => {
+            isHoveringInteractive = false;
+            document.body.classList.remove('cursor-active');
+        });
+    });
+
+    // Vòng lặp Render 60-120fps siêu mượt
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // 1. Cập nhật con trỏ chính (#cursor-dot) bám sát chuột
+        if (dot) {
+            dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+        }
+
+        // 2. Cập nhật vòng kính mờ (#cursor-ring) với Spring Physics (Lerp)
+        ringX += (mouseX - ringX) * 0.16;
+        ringY += (mouseY - ringY) * 0.16;
+
+        if (ring && !isMouseDown) {
+            ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+        }
+
+        // 3. Cập nhật hào quang nền Spotlight trượt nhẹ phía sau nội dung
+        if (spotlight) {
+            spotX += (mouseX - spotX) * 0.08;
+            spotY += (mouseY - spotY) * 0.08;
+            spotlight.style.transform = `translate3d(${spotX}px, ${spotY}px, 0)`;
+        }
+
+        // 4. Vẽ hạt bụi sao & vòng ánh sáng trên Canvas
+        ctx.clearRect(0, 0, width, height);
+
+        // Vẽ các vòng sóng ánh sáng click
+        for (let j = lightRipples.length - 1; j >= 0; j--) {
+            const rip = lightRipples[j];
+            rip.radius += rip.speed;
+            rip.alpha *= 0.94;
+
+            if (rip.alpha <= 0.01 || rip.radius >= rip.maxRadius) {
+                lightRipples.splice(j, 1);
+                continue;
+            }
+
+            ctx.beginPath();
+            ctx.arc(rip.x, rip.y, rip.radius, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(0, 180, 255, ${rip.alpha * 0.6})`;
+            ctx.lineWidth = Math.max(1, (1 - rip.radius / rip.maxRadius) * 3);
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = `rgba(120, 90, 255, ${rip.alpha * 0.8})`;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
+
+        // Vẽ các hạt tinh thể phát quang (Stardust)
+        for (let i = sparkles.length - 1; i >= 0; i--) {
+            const p = sparkles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vx *= 0.96;
+            p.vy *= 0.96;
+            p.alpha -= p.decay;
+            p.rotation += p.spinSpeed;
+            p.sparklePhase += 0.15;
+
+            if (p.alpha <= 0.01 || p.size <= 0.2) {
+                sparkles.splice(i, 1);
+                continue;
+            }
+
+            // Kích thước lấp lánh (twinkle)
+            const currentSize = p.size * (0.8 + 0.3 * Math.sin(p.sparklePhase));
+            const c = p.color;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation);
+
+            // Hào quang mềm quanh hạt sao
+            const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, currentSize * 2.2);
+            grad.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${p.alpha})`);
+            grad.addColorStop(0.5, `rgba(${c.r}, ${c.g}, ${c.b}, ${p.alpha * 0.4})`);
+            grad.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
+
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(0, 0, currentSize * 2.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Lõi hạt sao lấp lánh dạng hình kim cương 4 cánh
+            ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha * 0.95})`;
+            ctx.beginPath();
+            ctx.moveTo(0, -currentSize * 1.4);
+            ctx.quadraticCurveTo(0, 0, currentSize * 1.4, 0);
+            ctx.quadraticCurveTo(0, 0, 0, currentSize * 1.4);
+            ctx.quadraticCurveTo(0, 0, -currentSize * 1.4, 0);
+            ctx.quadraticCurveTo(0, 0, 0, -currentSize * 1.4);
+            ctx.fill();
+
+            ctx.restore();
+        }
+    }
+
+    animate();
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   3. FLOATING PARTICLES
+═══════════════════════════════════════════════════════════════════ */
+(function initParticles() {
+    const field = document.getElementById('particle-field');
+    if (!field) return;
+
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = 4 + Math.random() * 12;
+        const left = Math.random() * 100;
+        const duration = 15 + Math.random() * 25;
+        const delay = -(Math.random() * 25);
+        const opacity = 0.3 + Math.random() * 0.5;
+
+        p.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            left: ${left}%;
+            bottom: -20px;
+            animation-duration: ${duration}s;
+            animation-delay: ${delay}s;
+            opacity: ${opacity};
+        `;
+        field.appendChild(p);
+    }
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   4. SCROLL PROGRESS
+═══════════════════════════════════════════════════════════════════ */
+(function initScrollProgress() {
+    const bar = document.getElementById('scroll-progress');
+    if (!bar) return;
+
+    function update() {
+        const st = document.documentElement.scrollTop;
+        const sh = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (Math.min(st / sh, 1) * 100) + '%';
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   5. GSAP ANIMATIONS
+═══════════════════════════════════════════════════════════════════ */
+gsap.registerPlugin(ScrollTrigger);
+
+// ── Aurora orb gentle drift
+gsap.to('#orb-a', { x: 100, y:  70, duration: 10, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+gsap.to('#orb-b', { x: -80, y:  80, duration: 13, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+gsap.to('#orb-c', { x:  70, y: -60, duration: 11, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+gsap.to('#orb-d', { x: -60, y:  40, duration:  9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+// ── Hero entrance
+document.addEventListener('DOMContentLoaded', () => {
+    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+    tl
+        .to('#hero-badge', { opacity: 1, y: 0, duration: 0.9 })
+        .to('.line-inner', { y: '0%', duration: 1.2, stagger: 0.16 }, '-=0.55')
+        .to('.hero-sub',   { opacity: 1, y: 0, duration: 0.9 }, '-=0.75')
+        .to('.hero-cta',   { opacity: 1, y: 0, duration: 0.9 }, '-=0.75');
+
+    // Stats strip
+    gsap.from('#stats-strip .stat-pill', {
+        y: 30, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+        scrollTrigger: {
+            trigger: '#stats-strip',
+            start: 'top 88%',
+            once: true
+        }
+    });
+
+    // Reveal-up elements
+    gsap.utils.toArray('.reveal-up').forEach(el => {
+        gsap.to(el, {
+            y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+            scrollTrigger: {
+                trigger: el,
+                start: 'top 87%',
+                once: true
+            }
+        });
+    });
+
+    // Showcase cinematic scale
+    gsap.fromTo('.showcase-frame',
+        { scale: 0.9, borderRadius: '48px', opacity: 0 },
+        {
+            scale: 1, borderRadius: '32px', opacity: 1,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#nhom-chung-minh',
+                start: 'top 90%',
+                end: 'center center',
+                scrub: 1
+            }
+        }
+    );
+
+    gsap.to('.showcase-img', {
+        yPercent: 5,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '#nhom-chung-minh',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+        }
+    });
+
+    // Member cards stagger
+    gsap.from('.member-card', {
+        y: 50, opacity: 0, duration: 0.85, stagger: 0.1, ease: 'power3.out',
+        scrollTrigger: {
+            trigger: '#members-grid',
+            start: 'top 85%',
+            once: true
+        }
+    });
+
+    // Lesson boxes stagger
+    gsap.from('.lesson-reveal', {
+        y: 40, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out',
+        scrollTrigger: {
+            trigger: '#bai-tap',
+            start: 'top 85%',
+            once: true
+        }
+    });
+});
+
+// ── Marquee continuous scroll (RAF-based, smooth & seamless)
+(function initMarquee() {
+    const track = document.getElementById('marquee-track');
+    if (!track) return;
+    let pos = 0;
+    const speed = 0.6; // px per frame
+
+    function tick() {
+        pos -= speed;
+        // Reset when first copy scrolled out
+        const half = track.scrollWidth / 2;
+        if (-pos >= half) pos = 0;
+        track.style.transform = `translateX(${pos}px)`;
+        requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+})();
+
+// ── Liquid Glass 3D tilt for member cards & glass-cards
+(function initTilt() {
+    document.querySelectorAll('.tilt-card, .glass-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const r = card.getBoundingClientRect();
+            const x = e.clientX - r.left;
+            const y = e.clientY - r.top;
+            const cx = r.width  / 2;
+            const cy = r.height / 2;
+            const rX = ((y - cy) / cy) * -7;
+            const rY = ((x - cx) / cx) *  7;
+
+            card.style.setProperty('--mx', x + 'px');
+            card.style.setProperty('--my', y + 'px');
+
+            gsap.to(card, {
+                rotateX: rX,
+                rotateY: rY,
+                transformPerspective: 900,
+                duration: 0.4,
+                ease: 'power2.out'
+            });
+        });
+
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+                rotateX: 0, rotateY: 0,
+                duration: 0.65,
+                ease: 'power3.out'
+            });
+            card.style.removeProperty('--mx');
+            card.style.removeProperty('--my');
+        });
+    });
+})();
+
+// ── Magnetic buttons
+(function initMagnetic() {
+    document.querySelectorAll('.magnetic').forEach(el => {
+        el.addEventListener('mousemove', e => {
+            const r = el.getBoundingClientRect();
+            const x = (e.clientX - r.left - r.width  / 2) * 0.28;
+            const y = (e.clientY - r.top  - r.height / 2) * 0.28;
+            gsap.to(el, { x, y, duration: 0.35, ease: 'power2.out' });
+        });
+        el.addEventListener('mouseleave', () => {
+            gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+        });
+    });
+})();
+
+// ── Accordion toggle — animate exercise items in
+(function initAccordion() {
+    document.querySelectorAll('details.lesson-box').forEach(detail => {
+        detail.addEventListener('toggle', () => {
+            if (detail.open) {
+                const items = detail.querySelectorAll('.exercise-item');
+                gsap.fromTo(items,
+                    { y: 24, opacity: 0, scale: 0.97 },
+                    { y: 0, opacity: 1, scale: 1,
+                      duration: 0.55, stagger: 0.08, ease: 'power3.out' }
+                );
+            }
+        });
+    });
+})();
+
+// ── Scroll-driven nav opacity/shadow
+(function initNavScroll() {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) {
+            nav.style.boxShadow = '0 4px 32px rgba(80,100,180,0.12)';
+        } else {
+            nav.style.boxShadow = '';
+        }
+    }, { passive: true });
+})();
+</script>
+</body>
+</html>
