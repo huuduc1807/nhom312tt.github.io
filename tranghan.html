@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17121f">
+<meta name="description" content="Portfolio cá nhân của Nguyễn Hoàng Gia Hân — học sinh 5 không, nhà sáng tạo nội dung và người yêu ẩm thực.">
+<title>Gia Hân — The Art of Being Me</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#17121f;--ink:#fff8fc;--muted:#b9aebd;--pink:#f6b9d2;--pink2:#ff8fb8;--cyan:#00f2d2;--red:#ff758f;--glass:rgba(255,255,255,.075);--line:rgba(255,255,255,.13);--shadow:0 24px 80px rgba(0,0,0,.28)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Outfit, sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-3;background:radial-gradient(ellipse at 15% 12%,rgba(246,185,210,.22),transparent 34%),radial-gradient(ellipse at 85% 24%,rgba(0,242,210,.12),transparent 30%),radial-gradient(ellipse at 55% 90%,rgba(255,117,143,.12),transparent 38%),linear-gradient(135deg,#1c1423,#17121f 55%,#211522)}
+#stars{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.65}
+.noise{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E")}
+a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 48px));margin:auto}
+nav{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:relative;z-index:5}
+.logo{font-weight:800;letter-spacing:-1px;font-size:20px}.logo span{color:var(--cyan)}.navlinks{display:flex;gap:30px;font-size:13px;color:var(--muted)}.navlinks a{transition:.25s}.navlinks a:hover{color:var(--cyan)}
+.menu{display:none;background:none;border:1px solid var(--line);color:white;border-radius:50%;width:40px;height:40px;font-size:18px}
+.hero{min-height:690px;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:35px;padding:85px 0 100px;position:relative}
+.eyebrow,.mono{font-family:"DM Mono",monospace;text-transform:uppercase;letter-spacing:2px;font-size:11px;color:var(--cyan)}
+.eyebrow{display:flex;align-items:center;gap:12px}.eyebrow:before{content:"";width:34px;height:1px;background:var(--cyan)}
+h1{font-size:clamp(58px,8vw,108px);line-height:.91;letter-spacing:-6px;margin:26px 0 25px;font-weight:700}
+h1 .pink{color:var(--pink);text-shadow:0 0 35px rgba(246,185,210,.25)}h1 .outline{color:transparent;-webkit-text-stroke:1px rgba(255,248,252,.75)}
+.hero-copy{max-width:510px;color:#c8bdca;font-size:17px;line-height:1.75}.role{display:inline-flex;align-items:center;gap:10px;padding:10px 15px;border:1px solid rgba(0,242,210,.35);background:rgba(0,242,210,.07);border-radius:50px;color:#dffffa;font-size:13px;margin-top:16px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.actions{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}.btn{padding:14px 21px;border-radius:50px;font-size:13px;font-weight:600;border:1px solid var(--line);transition:.3s}.btn.primary{background:var(--cyan);color:#10201e;border-color:var(--cyan);box-shadow:0 8px 30px rgba(0,242,210,.18)}.btn:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.25)}
+.visual{height:480px;position:relative;display:grid;place-items:center}
+.orbit{position:absolute;width:390px;height:390px;border:1px solid rgba(246,185,210,.23);border-radius:50%;animation:spin 32s linear infinite}.orbit:before,.orbit:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 18px var(--cyan);top:35px;left:58px}.orbit:after{width:6px;height:6px;background:var(--pink2);box-shadow:0 0 18px var(--pink2);top:auto;left:auto;right:35px;bottom:95px}
+.orbit.two{width:310px;height:310px;border-style:dashed;border-color:rgba(0,242,210,.25);animation:spin 24s linear infinite reverse}
+.profile-card{width:275px;height:350px;border-radius:150px 150px 28px 28px;background:linear-gradient(145deg,rgba(246,185,210,.28),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.25);box-shadow:var(--shadow),inset 0 0 40px rgba(255,255,255,.07);backdrop-filter:blur(18px);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;animation:float 6s ease-in-out infinite}
+.profile-card:before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle,rgba(0,242,210,.23),transparent 68%);top:50px}
+.avatar{font-size:120px;filter:drop-shadow(0 15px 22px rgba(0,0,0,.25));z-index:1;transform:translateY(-4px)}
+.profile-label{position:absolute;bottom:28px;text-align:center;z-index:2}.profile-label strong{display:block;font-size:18px}.profile-label small{font:10px "DM Mono";color:var(--cyan);letter-spacing:2px}
+.spark{position:absolute;color:var(--pink);font-size:24px;animation:twinkle 3s ease-in-out infinite}.s1{top:48px;right:30px}.s2{bottom:55px;left:15px;animation-delay:1s}.s3{top:105px;left:5px;color:var(--cyan);font-size:15px}
+.float-tag{position:absolute;padding:12px 16px;border:1px solid var(--line);background:rgba(31,24,39,.72);backdrop-filter:blur(14px);border-radius:14px;font-size:12px;box-shadow:var(--shadow);animation:float 5s ease-in-out infinite}.tag-a{top:85px;right:-3px}.tag-b{bottom:75px;left:-5px;animation-delay:1.4s}.float-tag b{color:var(--cyan);font-weight:600}
+section{padding:95px 0;position:relative}.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:38px}.kicker{font:11px "DM Mono";color:var(--cyan);letter-spacing:2px;text-transform:uppercase}h2{font-size:clamp(36px,5vw,58px);letter-spacing:-2px;margin:10px 0 0;line-height:1.05}.section-note{max-width:300px;color:var(--muted);font-size:13px;line-height:1.6}
+.glass{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(18px);box-shadow:var(--shadow);border-radius:24px}
+.about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.about-main{padding:38px;min-height:260px}.about-main p{font-size:21px;line-height:1.65;color:#e8dfe8;margin:20px 0 0}.about-main em{font-style:normal;color:var(--pink)}
+.stat-card{padding:30px;display:flex;flex-direction:column;justify-content:space-between;min-height:260px;background:linear-gradient(145deg,rgba(0,242,210,.11),rgba(255,255,255,.04))}.stat-number{font-size:64px;font-weight:700;letter-spacing:-5px;color:var(--cyan)}.stat-card p{color:var(--muted);font-size:14px;line-height:1.6;margin:0}
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.skill{padding:26px;min-height:210px;transition:transform .2s,border-color .2s;transform-style:preserve-3d}.skill-icon{font-size:26px;margin-bottom:25px}.skill h3{font-size:20px;margin:0 0 9px}.skill p{color:var(--muted);font-size:13px;line-height:1.6;margin:0}.skill .index{font:10px "DM Mono";color:var(--cyan);letter-spacing:1px}
+.project{display:grid;grid-template-columns:1fr 1fr;overflow:hidden;min-height:350px}.project-art{background:radial-gradient(circle at 50% 45%,rgba(246,185,210,.28),transparent 48%),linear-gradient(135deg,#322035,#1c2630);display:grid;place-items:center;position:relative;min-height:320px}.project-art:before{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(0,242,210,.35);border-radius:50%;box-shadow:0 0 60px rgba(0,242,210,.1),inset 0 0 50px rgba(246,185,210,.1)}.rocket{font-size:100px;z-index:1;filter:drop-shadow(0 10px 25px rgba(0,0,0,.3));animation:float 5s ease-in-out infinite}.project-art .orbit{width:270px;height:270px}.project-info{padding:42px;display:flex;flex-direction:column;justify-content:center}.project-info h3{font-size:34px;letter-spacing:-1px;margin:14px 0}.project-info p{color:var(--muted);line-height:1.7;font-size:14px}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.chip{font:10px "DM Mono";padding:8px 11px;border:1px solid var(--line);border-radius:30px;color:#e5dce7}
+.quote{padding:60px 8%;text-align:center;position:relative;overflow:hidden;background:linear-gradient(120deg,rgba(246,185,210,.11),rgba(0,242,210,.07))}.quote:before{content:"“";position:absolute;font-size:230px;line-height:1;top:-35px;left:30px;color:rgba(246,185,210,.12);font-family:Georgia}.quote blockquote{font-size:clamp(28px,4vw,48px);line-height:1.2;letter-spacing:-1.5px;margin:0 auto 22px;max-width:800px;position:relative}.quote blockquote span{color:var(--pink)}.quote small{font:11px "DM Mono";letter-spacing:2px;color:var(--cyan)}
+footer{padding:28px 0 42px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:15px;color:var(--muted);font-size:12px}.footer-mark{color:var(--pink)}
+.reveal{opacity:0;transform:translateY(25px);transition:opacity .8s ease,transform .8s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes twinkle{0%,100%{opacity:.4;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+@media(max-width:800px){.wrap{width:min(100% - 34px,600px)}.navlinks{display:none;position:absolute;top:72px;right:0;flex-direction:column;gap:18px;padding:22px;background:#241b2b;border:1px solid var(--line);border-radius:16px}.navlinks.open{display:flex}.menu{display:block}.hero{grid-template-columns:1fr;padding:75px 0 65px;gap:20px}.hero-copy{font-size:15px}h1{letter-spacing:-4px}.visual{height:410px;grid-row:1}.profile-card{width:230px;height:300px}.avatar{font-size:100px}.orbit{width:330px;height:330px}.orbit.two{width:270px;height:270px}.tag-a{right:0}.tag-b{left:0}.section-head{align-items:start;flex-direction:column}.section-note{max-width:480px}.about-grid{grid-template-columns:1fr}.about-main{padding:28px}.about-main p{font-size:18px}.stat-card{min-height:190px}.skills{grid-template-columns:1fr 1fr}.project{grid-template-columns:1fr}.project-art{min-height:260px}.project-info{padding:30px}.quote{padding:48px 25px}footer{flex-direction:column}}
+@media(max-width:480px){.skills{grid-template-columns:1fr}.skill{min-height:170px}.visual{height:360px}.orbit{width:290px;height:290px}.orbit.two{width:235px;height:235px}.profile-card{width:205px;height:275px}.float-tag{font-size:10px;padding:10px 12px}.tag-a{top:40px}.tag-b{bottom:38px}.s1{right:10px}.s2{left:0}h1{font-size:58px}.hero{padding-top:40px}section{padding:70px 0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas><div class="noise"></div>
+<div class="wrap">
+<nav>
+  <a class="logo" href="#home">GH<span>.</span></a>
+  <div class="navlinks" id="navlinks"><a href="#about">About</a><a href="#strengths">Strengths</a><a href="#projects">Projects</a><a href="#vibe">My vibe</a></div>
+  <button class="menu" id="menu" aria-label="Mở menu">☰</button>
+</nav>
+<main>
+<section class="hero" id="home">
+  <div class="hero-content reveal">
+    <div class="eyebrow">A little universe of my own</div>
+    <h1>NGUYỄN<br><span class="pink">GIA HÂN</span><br><span class="outline">HOÀNG.</span></h1>
+    <p class="hero-copy">Một phiên bản giới hạn — luôn tò mò, luôn sáng tạo và luôn sẵn sàng khám phá những điều thú vị của thế giới.</p>
+    <div class="role"><i class="dot"></i> Học sinh 5 không</div>
+    <div class="actions"><a class="btn primary" href="#about">Khám phá hồ sơ <span>↗</span></a><a class="btn" href="#projects">Xem dự án</a></div>
+  </div>
+  <div class="visual reveal">
+    <div class="orbit"></div><div class="orbit two"></div>
+    <div class="profile-card"><div class="avatar">🪐</div><div class="profile-label"><strong>Gia Hân</strong><small>CREATIVE MIND · BIG DREAMS</small></div></div>
+    <span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✳</span>
+    <div class="float-tag tag-a">✦ <b>100%</b> cá tính</div><div class="float-tag tag-b">mood: <b>curious</b> ♡</div>
+  </div>
+</section>
+<section id="about">
+  <div class="section-head reveal"><div><div class="kicker">01 / About me</div><h2>Xin chào, thế giới.</h2></div><p class="section-note">Một chút giới thiệu, một chút tự tin — và rất nhiều năng lượng tích cực.</p></div>
+  <div class="about-grid">
+    <article class="glass about-main reveal"><div class="mono">THE PERSON BEHIND THE PROFILE</div><p>Tôi là <em>Nguyễn Hoàng Gia Hân</em> — một tâm hồn có gu, một bộ não luôn bật chế độ khám phá và một trái tim không bao giờ từ chối đồ ăn ngon. Nói ngắn gọn: <em>không điểm nào để chê.</em></p></article>
+    <article class="glass stat-card reveal"><div class="mono">PERSONALITY STATUS</div><div class="stat-number">∞</div><p>Năng lượng tò mò không giới hạn. Luôn tìm thấy điều đáng yêu trong những điều bình thường nhất.</p></article>
+  </div>
+</section>
+<section id="strengths">
+  <div class="section-head reveal"><div><div class="kicker">02 / What makes me, me</div><h2>Hệ điều hành<br>Gia Hân.</h2></div><p class="section-note">Những thế mạnh và sở thích tạo nên một bản sắc rất riêng.</p></div>
+  <div class="skills">
+    <article class="glass skill tilt reveal"><div class="skill-icon">🕵🏻‍♀️</div><div class="index">CORE SKILL / 01</div><h3>Hóng chuyện</h3><p>Kỹ năng thu thập thông tin nhanh nhạy, cập nhật tình hình với độ tập trung đáng nể.</p></article>
+    <article class="glass skill tilt reveal"><div class="skill-icon">🎬</div><div class="index">CREATIVE MODE / 02</div><h3>Nhà ráng tạo nội dung</h3><p>Biến những ý tưởng bất chợt thành nội dung có màu sắc, cá tính và dấu ấn riêng.</p></article>
+    <article class="glass skill tilt reveal"><div class="skill-icon">🍜</div><div class="index">FUEL / 03</div><h3>Ăn ăn ăn và ăn</h3><p>Đam mê khám phá thế giới qua vị giác. Một chiếc bụng vui là một ngày vui.</p></article>
+  </div>
+</section>
+<section id="projects">
+  <div class="section-head reveal"><div><div class="kicker">03 / Selected works</div><h2>Ý tưởng thành<br>hành động.</h2></div><p class="section-note">Mỗi dự án là một cơ hội để thử nghiệm, học hỏi và tạo nên điều mới mẻ.</p></div>
+  <article class="glass project reveal">
+    <div class="project-art"><div class="orbit"></div><div class="rocket">🚀</div></div>
+    <div class="project-info"><div class="kicker">FEATURED PROJECT · 2026</div><h3>Dự án khởi nghiệp tuổi 17</h3><p>Một hành trình đưa ý tưởng bước ra khỏi trang giấy: quan sát nhu cầu, sáng tạo giải pháp và thử sức biến điều mình tin tưởng thành giá trị thực tế.</p><div class="chips"><span class="chip">CREATIVITY</span><span class="chip">TEAMWORK</span><span class="chip">STARTUP MINDSET</span></div></div>
+  </article>
+</section>
+<section id="vibe">
+  <div class="section-head reveal"><div><div class="kicker">04 / Personal vibe</div><h2>Một câu để nhớ.</h2></div></div>
+  <div class="glass quote reveal"><blockquote>“Học tập là không ngừng <span>bỏ cuộc.</span>”</blockquote><small>— GIA HÂN'S LITTLE PHILOSOPHY —</small></div>
+</section>
+</main>
+<footer><span>© 2026 <b class="footer-mark">NGUYỄN HOÀNG GIA HÂN</b></span><span>Made with curiosity & a little stardust ✦</span></footer>
+</div>
+<script>
+// Subtle animated starfield
+const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');let stars=[];
+function resize(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);stars=Array.from({length:Math.min(110,Math.floor(innerWidth/9))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.4+.25,a:Math.random()*.55+.15,s:Math.random()*.18+.03}))}
+function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);for(const p of stars){p.y-=p.s;if(p.y<0)p.y=innerHeight;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,225,242,${p.a})`;ctx.fill()}requestAnimationFrame(draw)}
+addEventListener('resize',resize);resize();draw();
+// Mobile navigation
+document.getElementById('menu').addEventListener('click',()=>document.getElementById('navlinks').classList.toggle('open'));
+document.querySelectorAll('.navlinks a').forEach(a=>a.addEventListener('click',()=>document.getElementById('navlinks').classList.remove('open')));
+// Reveal on scroll
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+// Gentle 3D tilt for pointer devices
+if(matchMedia('(hover:hover) and (pointer:fine)').matches){document.querySelectorAll('.tilt').forEach(card=>{card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(800px) rotateX(${-y*7}deg) rotateY(${x*7}deg) translateY(-4px)`});card.addEventListener('mouseleave',()=>card.style.transform='')})}
+</script>
+</body>
+</html>

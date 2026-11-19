@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huỳnh Dương Ái My — Hồ sơ Cá nhân</title>
+    
+    <!-- Google Fonts: Newsreader (Serif học thuật, sắc nét) & Plus Jakarta Sans (Sans-serif hiện đại, chuẩn mực) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vanilla Tilt JS CDN (Hiệu ứng nghiêng thẻ 3D nhẹ) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
+    <!-- Cấu hình bảng màu & font chữ chuẩn mực -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Newsreader"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        editorial: {
+                            paper: '#F9F7F3',     // Nền kem be giấy dó ấm
+                            blush: '#F3E5E7',     // Hồng phấn nhạt tiết chế
+                            sage: '#E3ECE8',      // Xanh ngọc xám nhẹ
+                            ink: '#1E2421',       // Than chì đậm sắc nét
+                            muted: '#525C57',     // Xám rêu trầm cho mô tả phụ
+                            accent: '#8E4A56',    // Đỏ hồng trầm cổ điển (điểm nhấn)
+                            pine: '#3D5A50',      // Xanh rêu học thuật (điểm nhấn phụ)
+                            line: 'rgba(30, 36, 33, 0.12)' // Đường kẻ hairline
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==========================================================================
+           1. NỀN GIẤY DÓ & SÓNG LỤA TỐI GIẢN (ACADEMIC MINIMALISM)
+           ========================================================================== */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #1E2421;
+            background-color: #F9F7F3;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.65;
+        }
+
+        /* Mảng màu nền chuyển sắc nhẹ nhàng, điềm đạm */
+        .ambient-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(243, 229, 231, 0.78) 0%, transparent 48%),
+                radial-gradient(circle at 85% 25%, rgba(227, 236, 232, 0.82) 0%, transparent 50%),
+                radial-gradient(circle at 75% 85%, rgba(243, 229, 231, 0.55) 0%, transparent 50%),
+                linear-gradient(180deg, #F9F7F3 0%, #F5F2EC 100%);
+        }
+
+        /* Vân lưới giấy học thuật cực mảnh */
+        .paper-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            opacity: 0.35;
+            background-image: 
+                linear-gradient(to right, rgba(30, 36, 33, 0.035) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 36, 33, 0.035) 1px, transparent 1px);
+            background-size: 64px 64px;
+            pointer-events: none;
+        }
+
+        /* ==========================================================================
+           2. SÓNG LỤA & ĐƯỜNG NÉT TRUYỀN THỐNG CHUYỂN ĐỘNG CHẬM
+           ========================================================================== */
+        .silk-contour-layer {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .slow-wave {
+            position: absolute;
+            opacity: 0.45;
+            animation: gentleDrift 45s ease-in-out infinite alternate;
+        }
+
+        .wave-top {
+            top: -4%;
+            right: -6%;
+            width: 560px;
+        }
+
+        .wave-bottom {
+            bottom: -6%;
+            left: -8%;
+            width: 620px;
+            animation-duration: 55s;
+            animation-direction: alternate-reverse;
+        }
+
+        @keyframes gentleDrift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-24px, 16px) scale(1.03); }
+        }
+
+        /* ==========================================================================
+           3. THẺ KÍNH MỜ HAIRLINE (GLASSMORPHISM TỐI GIẢN)
+           ========================================================================== */
+        .editorial-card {
+            background: rgba(255, 255, 255, 0.58);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(30, 36, 33, 0.11);
+            box-shadow: 0 4px 24px -6px rgba(30, 36, 33, 0.04);
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .editorial-card:hover {
+            background: rgba(255, 255, 255, 0.78);
+            border-color: rgba(142, 74, 86, 0.35);
+            box-shadow: 0 12px 32px -8px rgba(30, 36, 33, 0.07);
+        }
+
+        .editorial-surface {
+            background: rgba(243, 229, 231, 0.28);
+            border: 1px solid rgba(30, 36, 33, 0.1);
+        }
+
+        /* ==========================================================================
+           4. HIỆU ỨNG XUẤT HIỆN NHẸ NHÀNG & CHỈ SỐ NĂNG LỰC
+           ========================================================================== */
+        .fade-section {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .fade-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .skill-bar-fill {
+            width: 0%;
+            transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Thông báo Toast sao chép email */
+        #copy-toast {
+            transform: translateY(16px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        #copy-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-editorial-blush selection:text-editorial-ink">
+
+    <!-- LỚP NỀN GIẤY DÓ & ĐƯỜNG NÉT LỤA TỐI GIẢN -->
+    <div class="ambient-backdrop"></div>
+    <div class="paper-grid"></div>
+
+    <div class="silk-contour-layer" aria-hidden="true">
+        <!-- Đường nét sóng mây tối giản góc trên phải -->
+        <svg class="slow-wave wave-top" viewBox="0 0 600 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 40C160 30 220 120 340 110C460 100 510 30 590 50" stroke="#8E4A56" stroke-opacity="0.16" stroke-width="1"/>
+            <path d="M30 85C150 75 210 165 330 155C450 145 500 75 580 95" stroke="#3D5A50" stroke-opacity="0.16" stroke-width="1"/>
+            <path d="M70 130C180 120 240 210 360 200C480 190 530 120 600 140" stroke="#8E4A56" stroke-opacity="0.1" stroke-width="1" stroke-dasharray="4 6"/>
+        </svg>
+
+        <!-- Đường nét sóng mây tối giản góc dưới trái -->
+        <svg class="slow-wave wave-bottom" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M-20 220C90 210 150 130 270 140C390 150 440 230 560 210" stroke="#3D5A50" stroke-opacity="0.16" stroke-width="1"/>
+            <path d="M-10 260C100 250 160 170 280 180C400 190 450 270 570 250" stroke="#8E4A56" stroke-opacity="0.14" stroke-width="1"/>
+        </svg>
+    </div>
+
+    <!-- ==========================================================================
+         THANH ĐIỀU HƯỚNG TỐI GIẢN (EDITORIAL NAVBAR)
+         ========================================================================== -->
+    <header class="sticky top-0 z-50 border-b border-editorial-line bg-editorial-paper/80 backdrop-blur-md">
+        <nav class="max-w-5xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+            <!-- Định danh cá nhân -->
+            <a href="#top" class="flex items-center gap-3 group">
+                <span class="w-7 h-7 rounded-md bg-editorial-blush border border-editorial-line flex items-center justify-center font-serif font-semibold text-editorial-accent text-sm">
+                    M
+                </span>
+                <span class="font-serif text-lg font-medium tracking-tight text-editorial-ink">
+                    Huỳnh Dương Ái My
+                </span>
+            </a>
+
+            <!-- Liên kết điều hướng Desktop -->
+            <ul class="hidden md:flex items-center gap-8 text-[13px] font-medium text-editorial-muted">
+                <li><a href="#about" class="hover:text-editorial-ink transition-colors">Giới thiệu</a></li>
+                <li><a href="#competencies" class="hover:text-editorial-ink transition-colors">Năng lực & Quan tâm</a></li>
+                <li><a href="#projects" class="hover:text-editorial-ink transition-colors">Dự án</a></li>
+                <li><a href="#contact" class="hover:text-editorial-ink transition-colors">Liên hệ</a></li>
+            </ul>
+
+            <!-- Nút liên hệ nhanh / Menu Mobile -->
+            <div class="flex items-center gap-3">
+                <a href="#contact" class="hidden sm:inline-flex items-center px-4 py-1.5 rounded-md text-xs font-medium bg-editorial-ink text-editorial-paper hover:bg-editorial-accent transition-colors">
+                    Kết nối
+                </a>
+                <button id="mobile-menu-btn" aria-label="Mở danh mục" class="md:hidden p-2 rounded-md border border-editorial-line text-editorial-ink hover:bg-editorial-blush/40 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h16"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Menu Mobile thả xuống -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-editorial-line bg-editorial-paper/95 backdrop-blur-md px-5 py-4">
+            <ul class="flex flex-col gap-2.5 text-sm font-medium text-editorial-ink">
+                <li><a href="#about" class="mobile-link block py-1.5 hover:text-editorial-accent">01. Giới thiệu</a></li>
+                <li><a href="#competencies" class="mobile-link block py-1.5 hover:text-editorial-accent">02. Năng lực & Mối quan tâm</a></li>
+                <li><a href="#projects" class="mobile-link block py-1.5 hover:text-editorial-accent">03. Dự án & Hoạt động</a></li>
+                <li><a href="#contact" class="mobile-link block py-1.5 text-editorial-accent font-semibold">04. Liên hệ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main id="top" class="max-w-5xl mx-auto px-5 sm:px-8 pt-14 sm:pt-20 pb-24 space-y-24 sm:space-y-28">
+
+        <!-- ==========================================================================
+             1. HERO SECTION (TRÌNH BÀY CHUẨN MỰC, RÕ RÀNG)
+             ========================================================================== -->
+        <section class="fade-section grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 items-center">
+            <!-- Cột thông tin chính -->
+            <div class="md:col-span-8 space-y-5">
+                <div class="inline-flex items-center gap-2.5 px-3 py-1 rounded-md bg-editorial-sage/75 border border-editorial-line text-xs font-medium text-editorial-pine">
+                    <span class="w-1.5 h-1.5 rounded-full bg-editorial-pine"></span>
+                    <span>Hồ sơ Cá nhân &bull; Portfolio</span>
+                </div>
+
+                <h1 class="font-serif text-4xl sm:text-5xl lg:text-[54px] font-medium text-editorial-ink tracking-tight leading-[1.15]">
+                    Huỳnh Dương Ái My
+                </h1>
+
+                <p class="text-sm sm:text-base font-medium text-editorial-accent tracking-wide">
+                    Tư duy Hệ thống &middot; Sáng tạo Nội dung &middot; Đam mê Cầu lông &amp; Nhạc cụ
+                </p>
+
+                <p class="text-editorial-muted text-sm sm:text-base max-w-2xl leading-relaxed pt-1">
+                    Hướng tới sự kết hợp giữa phương pháp phân tích logic và cách trình bày nội dung mạch lạc. Đề cao tinh thần tự học chủ động và sự phối hợp hiệu quả trong công việc tập thể.
+                </p>
+
+                <div class="pt-3 flex flex-wrap items-center gap-3.5">
+                    <a href="#about" class="px-5 py-2.5 rounded-md bg-editorial-ink text-editorial-paper text-xs sm:text-sm font-medium hover:bg-editorial-accent transition-colors">
+                        Thông tin tổng quan
+                    </a>
+                    <a href="#competencies" class="px-5 py-2.5 rounded-md editorial-card text-editorial-ink text-xs sm:text-sm font-medium hover:border-editorial-ink/30 transition-colors">
+                        Năng lực &amp; Quan tâm
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cột Ảnh đại diện (Vị trí chèn ảnh 1: avatar.jpg) -->
+            <div class="md:col-span-4 flex justify-start md:justify-end">
+                <div class="w-48 sm:w-56 editorial-card rounded-2xl p-2.5">
+                    <div class="aspect-square rounded-xl overflow-hidden bg-editorial-blush/50 border border-editorial-line">
+                        <!-- CHÈN ẢNH CHÂN DUNG: Đặt file 'avatar.jpg' cùng thư mục với index.html -->
+                        <img 
+                            src="avatar.jpg" 
+                            alt="Chân dung Huỳnh Dương Ái My"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x400/F3E5E7/1E2421?text=AM';"
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="pt-2.5 px-1 flex items-center justify-between text-[11px] text-editorial-muted">
+                        <span>Chân dung</span>
+                        <span>01 / 01</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Đường phân cách hairline -->
+        <hr class="border-editorial-line">
+
+        <!-- ==========================================================================
+             2. GIỚI THIỆU BẢN THÂN (ABOUT ME)
+             ========================================================================== -->
+        <section id="about" class="fade-section scroll-mt-24">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                <!-- Tiêu đề mục bên trái -->
+                <div class="lg:col-span-4 space-y-2">
+                    <span class="text-xs font-semibold uppercase tracking-widest text-editorial-pine">01 / Giới thiệu</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-medium text-editorial-ink">
+                        Phương pháp &amp; Định hướng
+                    </h2>
+                </div>
+
+                <!-- Nội dung cô đọng bên phải -->
+                <div class="lg:col-span-8 editorial-card rounded-2xl p-6 sm:p-8 space-y-6" data-tilt data-tilt-max="2" data-tilt-speed="500">
+                    <p class="text-editorial-ink text-sm sm:text-base leading-relaxed">
+                        Mình tiếp cận vấn đề dựa trên tư duy logic, ưu tiên việc phân tích cấu trúc rõ ràng trước khi triển khai giải pháp. Trong môi trường tập thể, sự hòa đồng, lắng nghe và tinh thần trách nhiệm giúp mình duy trì nhịp độ phối hợp nhóm ổn định. Song song đó, mình duy trì thói quen tự học mỗi ngày để nâng cao kỹ năng biên tập, sáng tạo nội dung mạch lạc và thích ứng tốt với các yêu cầu mới.
+                    </p>
+
+                    <!-- 3 Giá trị cốt lõi dạng bảng thông số gọn gàng -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-editorial-line">
+                        <div class="p-3.5 rounded-xl bg-editorial-paper/80 border border-editorial-line">
+                            <span class="block text-[11px] uppercase tracking-wider text-editorial-muted">Tư duy</span>
+                            <span class="mt-1 block text-sm font-medium text-editorial-ink">Logic &amp; Hệ thống</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-editorial-blush/35 border border-editorial-line">
+                            <span class="block text-[11px] uppercase tracking-wider text-editorial-muted">Thái độ</span>
+                            <span class="mt-1 block text-sm font-medium text-editorial-ink">Tự học &amp; Cầu thị</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-editorial-sage/45 border border-editorial-line">
+                            <span class="block text-[11px] uppercase tracking-wider text-editorial-muted">Phối hợp</span>
+                            <span class="mt-1 block text-sm font-medium text-editorial-ink">Hòa đồng &amp; Rõ ràng</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             3. NĂNG LỰC & MỐI QUAN TÂM (CORE COMPETENCIES & INTERESTS)
+             ========================================================================== -->
+        <section id="competencies" class="fade-section space-y-8 scroll-mt-24">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-editorial-line pb-5">
+                <div class="space-y-1.5">
+                    <span class="text-xs font-semibold uppercase tracking-widest text-editorial-pine">02 / Hồ sơ năng lực</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-medium text-editorial-ink">
+                        Năng lực &amp; Mối quan tâm
+                    </h2>
+                </div>
+                <p class="text-xs sm:text-sm text-editorial-muted">
+                    Các kỹ năng chuyên môn bổ trợ và hoạt động rèn luyện cá nhân.
+                </p>
+            </div>
+
+            <!-- Lưới 4 thẻ kính mờ tối giản -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                <!-- Thẻ 01: Tư duy Logic & Giải quyết vấn đề -->
+                <div class="editorial-card rounded-2xl p-6 flex flex-col justify-between space-y-5" data-tilt data-tilt-max="4" data-tilt-speed="450">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-md bg-editorial-sage/70 text-[11px] font-medium text-editorial-pine">
+                                Kỹ năng cốt lõi
+                            </span>
+                            <span class="font-serif text-sm text-editorial-muted">01</span>
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-editorial-ink">
+                            Tư duy Logic &amp; Giải quyết vấn đề
+                        </h3>
+                        <p class="text-sm text-editorial-muted leading-relaxed">
+                            Phân tích cấu trúc vấn đề khách quan, đề xuất hướng xử lý theo trình tự. Hòa đồng, giao tiếp cởi mở và phối hợp teamwork hiệu quả trong các hoạt động chung.
+                        </p>
+                    </div>
+
+                    <div class="space-y-1.5 pt-2">
+                        <div class="flex justify-between text-xs text-editorial-muted">
+                            <span>Mức độ ứng dụng</span>
+                            <span class="font-medium text-editorial-ink">90%</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-editorial-ink/10 overflow-hidden">
+                            <div class="skill-bar-fill h-full rounded-full bg-editorial-pine" data-width="90%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ 02: Sáng tạo nội dung & Tự học -->
+                <div class="editorial-card rounded-2xl p-6 flex flex-col justify-between space-y-5" data-tilt data-tilt-max="4" data-tilt-speed="450">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-md bg-editorial-blush/80 text-[11px] font-medium text-editorial-accent">
+                                Phát triển chuyên môn
+                            </span>
+                            <span class="font-serif text-sm text-editorial-muted">02</span>
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-editorial-ink">
+                            Sáng tạo Nội dung &amp; Tự học
+                        </h3>
+                        <p class="text-sm text-editorial-muted leading-relaxed">
+                            Xây dựng nội dung mạch lạc, chú trọng tính chính xác và thẩm mỹ trình bày. Chủ động nghiên cứu, hệ thống hóa kiến thức và công cụ mới một cách độc lập.
+                        </p>
+                    </div>
+
+                    <div class="space-y-1.5 pt-2">
+                        <div class="flex justify-between text-xs text-editorial-muted">
+                            <span>Mức độ quan tâm</span>
+                            <span class="font-medium text-editorial-ink">92%</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-editorial-ink/10 overflow-hidden">
+                            <div class="skill-bar-fill h-full rounded-full bg-editorial-accent" data-width="92%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ 03: Âm nhạc & Nhạc cụ -->
+                <div class="editorial-card rounded-2xl p-6 flex flex-col justify-between space-y-5" data-tilt data-tilt-max="4" data-tilt-speed="450">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-md bg-editorial-paper border border-editorial-line text-[11px] font-medium text-editorial-muted">
+                                Mối quan tâm
+                            </span>
+                            <span class="font-serif text-sm text-editorial-muted">03</span>
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-editorial-ink">
+                            Âm nhạc &amp; Nhạc cụ
+                        </h3>
+                        <p class="text-sm text-editorial-muted leading-relaxed">
+                            Tìm hiểu và thực hành nhạc cụ ở mức độ cơ bản như một phương thức rèn luyện sự tập trung, tính kiên nhẫn và cân bằng trạng thái tinh thần.
+                        </p>
+                    </div>
+
+                    <div class="space-y-1.5 pt-2">
+                        <div class="flex justify-between text-xs text-editorial-muted">
+                            <span>Duy trì thực hành</span>
+                            <span class="font-medium text-editorial-ink">80%</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-editorial-ink/10 overflow-hidden">
+                            <div class="skill-bar-fill h-full rounded-full bg-editorial-pine/80" data-width="80%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ 04: Thể thao — Cầu lông -->
+                <div class="editorial-card rounded-2xl p-6 flex flex-col justify-between space-y-5" data-tilt data-tilt-max="4" data-tilt-speed="450">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-md bg-editorial-paper border border-editorial-line text-[11px] font-medium text-editorial-muted">
+                                Rèn luyện thể chất
+                            </span>
+                            <span class="font-serif text-sm text-editorial-muted">04</span>
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-editorial-ink">
+                            Thể thao — Bộ môn Cầu lông
+                        </h3>
+                        <p class="text-sm text-editorial-muted leading-relaxed">
+                            Duy trì tập luyện cầu lông thường xuyên nhằm rèn luyện thể lực, tốc độ phản xạ và tính kỷ luật trong sinh hoạt cá nhân.
+                        </p>
+                    </div>
+
+                    <div class="space-y-1.5 pt-2">
+                        <div class="flex justify-between text-xs text-editorial-muted">
+                            <span>Tần suất vận động</span>
+                            <span class="font-medium text-editorial-ink">85%</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-editorial-ink/10 overflow-hidden">
+                            <div class="skill-bar-fill h-full rounded-full bg-editorial-accent/85" data-width="85%"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             4. DỰ ÁN & HOẠT ĐỘNG (PROJECTS & ACTIVITIES - KHUNG CHỜ CẬP NHẬT)
+             ========================================================================== -->
+        <section id="projects" class="fade-section space-y-8 scroll-mt-24">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-editorial-line pb-5">
+                <div class="space-y-1.5">
+                    <span class="text-xs font-semibold uppercase tracking-widest text-editorial-pine">03 / Lưu trữ</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-medium text-editorial-ink">
+                        Dự án &amp; Hoạt động
+                    </h2>
+                </div>
+                <p class="text-xs sm:text-sm text-editorial-muted">
+                    Danh mục lưu trữ các sản phẩm học thuật và hoạt động thực tế.
+                </p>
+            </div>
+
+            <!-- 
+                ======================================================================
+                HƯỚNG DẪN CẬP NHẬT DỰ ÁN SAU NÀY:
+                Để thêm dự án vào từng mục (01, 02, 03), bạn có thể chèn thẻ <img> 
+                (ví dụ: src="project-1.jpg") và thay đổi tiêu đề + đoạn mô tả ngắn bên dưới.
+                ======================================================================
+            -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                
+                <!-- Mục lưu trữ 01 -->
+                <article class="editorial-card rounded-2xl p-6 border-dashed flex flex-col justify-between min-h-[220px]">
+                    <div class="flex items-center justify-between text-xs text-editorial-muted">
+                        <span class="font-serif font-medium text-editorial-ink">Mục 01</span>
+                        <span class="px-2 py-0.5 rounded bg-editorial-paper border border-editorial-line text-[11px]">Chờ cập nhật</span>
+                    </div>
+                    <div class="my-auto py-6 space-y-1.5">
+                        <h3 class="font-serif text-lg font-medium text-editorial-ink">
+                            Dự án / Nghiên cứu 01
+                        </h3>
+                        <p class="text-xs text-editorial-muted leading-relaxed">
+                            Chưa có dữ liệu hiển thị. Nội dung và hình ảnh minh họa sẽ được bổ sung sau.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-editorial-line text-[11px] text-editorial-muted">
+                        Trạng thái: Trống
+                    </div>
+                </article>
+
+                <!-- Mục lưu trữ 02 -->
+                <article class="editorial-card rounded-2xl p-6 border-dashed flex flex-col justify-between min-h-[220px]">
+                    <div class="flex items-center justify-between text-xs text-editorial-muted">
+                        <span class="font-serif font-medium text-editorial-ink">Mục 02</span>
+                        <span class="px-2 py-0.5 rounded bg-editorial-paper border border-editorial-line text-[11px]">Chờ cập nhật</span>
+                    </div>
+                    <div class="my-auto py-6 space-y-1.5">
+                        <h3 class="font-serif text-lg font-medium text-editorial-ink">
+                            Hoạt động Nhóm 02
+                        </h3>
+                        <p class="text-xs text-editorial-muted leading-relaxed">
+                            Chưa có dữ liệu hiển thị. Nội dung và hình ảnh minh họa sẽ được bổ sung sau.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-editorial-line text-[11px] text-editorial-muted">
+                        Trạng thái: Trống
+                    </div>
+                </article>
+
+                <!-- Mục lưu trữ 03 -->
+                <article class="editorial-card rounded-2xl p-6 border-dashed flex flex-col justify-between min-h-[220px]">
+                    <div class="flex items-center justify-between text-xs text-editorial-muted">
+                        <span class="font-serif font-medium text-editorial-ink">Mục 03</span>
+                        <span class="px-2 py-0.5 rounded bg-editorial-paper border border-editorial-line text-[11px]">Chờ cập nhật</span>
+                    </div>
+                    <div class="my-auto py-6 space-y-1.5">
+                        <h3 class="font-serif text-lg font-medium text-editorial-ink">
+                            Nội dung Sáng tạo 03
+                        </h3>
+                        <p class="text-xs text-editorial-muted leading-relaxed">
+                            Chưa có dữ liệu hiển thị. Nội dung và hình ảnh minh họa sẽ được bổ sung sau.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-editorial-line text-[11px] text-editorial-muted">
+                        Trạng thái: Trống
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             5. CHÂM NGÔN LÀM VIỆC (WORKING PRINCIPLE / EPIGRAPH)
+             ========================================================================== -->
+        <section class="fade-section">
+            <div class="editorial-surface rounded-2xl px-6 py-9 sm:px-12 sm:py-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <blockquote class="space-y-2 max-w-2xl">
+                    <p class="font-serif italic text-xl sm:text-2xl text-editorial-ink leading-snug">
+                        &ldquo;Rõ ràng trong tư duy, mạch lạc trong diễn đạt.&rdquo;
+                    </p>
+                    <footer class="text-xs uppercase tracking-widest text-editorial-muted">
+                        Nguyên tắc làm việc &amp; Học tập
+                    </footer>
+                </blockquote>
+                <div class="hidden sm:block text-right font-serif text-3xl text-editorial-accent/40 select-none">
+                    &sect;
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             6. LIÊN HỆ & KẾT NỐI (CONTACT & LINKS)
+             ========================================================================== -->
+        <section id="contact" class="fade-section space-y-6 scroll-mt-24">
+            <div class="editorial-card rounded-2xl p-7 sm:p-10">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                    <div class="space-y-2 max-w-lg">
+                        <span class="text-xs font-semibold uppercase tracking-widest text-editorial-pine">04 / Liên hệ</span>
+                        <h2 class="font-serif text-2xl sm:text-3xl font-medium text-editorial-ink">
+                            Thông tin Kết nối
+                        </h2>
+                        <p class="text-sm text-editorial-muted">
+                            Liên hệ trao đổi về học tập, công việc nhóm hoặc các dự án nội dung qua các kênh dưới đây.
+                        </p>
+                    </div>
+
+                    <!-- Cụm nút liên kết tối giản + Sao chép Email -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        
+                        <!-- Nút sao chép nhanh Email -->
+                        <button type="button" id="copy-email-btn" data-email="aimy.huynhduong@example.com"
+                            class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-editorial-ink text-editorial-paper text-xs sm:text-sm font-medium hover:bg-editorial-accent transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            <span>Sao chép Email</span>
+                        </button>
+
+                        <!-- Facebook -->
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/80 hover:bg-editorial-blush/60 border border-editorial-line text-editorial-ink text-xs sm:text-sm font-medium transition-colors">
+                            <span>Facebook</span>
+                            <svg class="w-3.5 h-3.5 text-editorial-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+                        </a>
+
+                        <!-- GitHub -->
+                        <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/80 hover:bg-editorial-sage/70 border border-editorial-line text-editorial-ink text-xs sm:text-sm font-medium transition-colors">
+                            <span>GitHub</span>
+                            <svg class="w-3.5 h-3.5 text-editorial-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/80 hover:bg-editorial-blush/60 border border-editorial-line text-editorial-ink text-xs sm:text-sm font-medium transition-colors">
+                            <span>Instagram</span>
+                            <svg class="w-3.5 h-3.5 text-editorial-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==========================================================================
+         FOOTER TỐI GIẢN
+         ========================================================================== -->
+    <footer class="border-t border-editorial-line py-8 px-5 sm:px-8">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-editorial-muted">
+            <span class="font-serif text-sm text-editorial-ink">Huỳnh Dương Ái My</span>
+            <span>&copy; 2026 &mdash; Cập nhật định kỳ.</span>
+        </div>
+    </footer>
+
+    <!-- Thông báo nhỏ khi sao chép Email -->
+    <div id="copy-toast" class="fixed bottom-5 right-5 z-50 px-4 py-2.5 rounded-lg bg-editorial-ink text-editorial-paper text-xs font-medium shadow-lg">
+        Đã sao chép địa chỉ email vào bộ nhớ tạm.
+    </div>
+
+    <!-- ==========================================================================
+         JAVASCRIPT ĐIỀU KHIỂN TƯƠNG TÁC
+         ========================================================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Khởi tạo hiệu ứng nghiêng nhẹ 3D trên thiết bị có chuột
+            if (typeof VanillaTilt !== 'undefined' && window.matchMedia('(hover: hover)').matches) {
+                VanillaTilt.init(document.querySelectorAll('[data-tilt]'));
+            }
+
+            // 2. Điều khiển Menu Mobile
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+                });
+            }
+
+            // 3. Hiệu ứng hiển thị mượt khi cuộn & kích hoạt thanh chỉ số năng lực
+            const sections = document.querySelectorAll('.fade-section');
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        const bars = entry.target.querySelectorAll('.skill-bar-fill');
+                        bars.forEach(bar => {
+                            const width = bar.getAttribute('data-width');
+                            if (width) {
+                                setTimeout(() => { bar.style.width = width; }, 150);
+                            }
+                        });
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+
+            sections.forEach(sec => observer.observe(sec));
+
+            // 4. Chức năng sao chép Email nhanh (tương thích an toàn với iFrame)
+            const copyBtn = document.getElementById('copy-email-btn');
+            const toast = document.getElementById('copy-toast');
+            let toastTimer;
+
+            if (copyBtn && toast) {
+                copyBtn.addEventListener('click', () => {
+                    const email = copyBtn.getAttribute('data-email');
+                    const tempInput = document.createElement('input');
+                    tempInput.value = email;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    try {
+                        document.execCommand('copy');
+                        toast.textContent = `Đã sao chép: ${email}`;
+                        toast.classList.add('show');
+                        clearTimeout(toastTimer);
+                        toastTimer = setTimeout(() => {
+                            toast.classList.remove('show');
+                        }, 2800);
+                    } catch (err) {
+                        window.location.href = `mailto:${email}`;
+                    }
+                    document.body.removeChild(tempInput);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
